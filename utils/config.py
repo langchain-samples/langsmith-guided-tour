@@ -7,11 +7,12 @@ should register their agent here, not edit individual notebooks.
 import os
 
 # Which agent the tour notebooks build/trace/evaluate against.
-#   "research_agent" — the fully-implemented research deep agent (NB02-06 default)
-#   "deep_agent"     — the stock writer agent (referenced by NB06 / deploy)
+#   "client_research_agent" — client research deep agent (NB02-06 default)
+#   "research_agent"        — earlier minimal research agent (kept for reference)
+#   "deep_agent"            — stock writer agent (referenced by NB06 / deploy)
 # To add a new agent: expose a build_<name>() factory under agents/,
 # add a branch below, and update ACTIVE_AGENT here.
-ACTIVE_AGENT = "research_agent"
+ACTIVE_AGENT = "client_research_agent"
 
 # LangSmith project name used across notebooks. Override per-environment via
 # the LANGSMITH_PROJECT env var.
@@ -20,6 +21,9 @@ PROJECT_NAME = os.getenv("LANGSMITH_PROJECT", "langsmith-poc-tour")
 
 def load_active_agent():
     """Return a freshly built instance of the active agent."""
+    if ACTIVE_AGENT == "client_research_agent":
+        from agents.client_research_agent import build_client_research_agent
+        return build_client_research_agent()
     if ACTIVE_AGENT == "research_agent":
         from agents.research_agent import build_research_agent
         return build_research_agent()
