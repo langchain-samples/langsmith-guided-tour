@@ -9,7 +9,7 @@ import os
 # Which agent the tour notebooks build/trace/evaluate against.
 #   "client_research_agent" — client research deep agent (NB02-06 default)
 #   "research_agent"        — earlier minimal research agent (kept for reference)
-#   "deep_agent"            — stock writer agent (referenced by NB06 / deploy)
+#   "base_research_agent"   — deployable research/writer agent (used by NB06 / deploy)
 # To add a new agent: expose a build_<name>() factory under agents/,
 # add a branch below, and update ACTIVE_AGENT here.
 ACTIVE_AGENT = "client_research_agent"
@@ -27,7 +27,7 @@ def load_active_agent():
     if ACTIVE_AGENT == "research_agent":
         from agents.research_agent import build_research_agent
         return build_research_agent()
-    if ACTIVE_AGENT == "deep_agent":
-        from agents.deep_agent.agent import agent
+    if ACTIVE_AGENT == "base_research_agent":
+        from agents.deployable_agents.base_research_agent.agent import agent
         return agent
     raise ValueError(f"Unknown ACTIVE_AGENT: {ACTIVE_AGENT!r}")

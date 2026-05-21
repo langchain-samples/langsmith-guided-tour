@@ -1,0 +1,3 @@
+[agent]
+name = "langsmith-tour-client-research"
+model = "openai:gpt-4.1-mini"
