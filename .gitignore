@@ -43,3 +43,6 @@ Thumbs.db
 
 # Local langgraph dev output
 .langgraph_api/
+
+# Internal planning docs (not shipped with the tour)
+planning/
