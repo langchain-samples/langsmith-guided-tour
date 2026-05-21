@@ -1,12 +1,12 @@
-"""Tour-wide configuration: which agent to run against and which LangSmith project.
+"""Shared configuration: which agent to run against and which LangSmith project.
 
-Edit ACTIVE_AGENT to swap workloads. Deployed engineers adding a new use case
-should register their agent here, not edit individual notebooks.
+Edit ACTIVE_AGENT to swap workloads. Engineers adding a new use case should
+register their agent here, not edit individual notebooks.
 """
 
 import os
 
-# Which agent the tour notebooks build/trace/evaluate against.
+# Which agent the notebooks build/trace/evaluate against.
 #   "client_research_agent" — client research deep agent (NB02-06 default)
 #   "research_agent"        — earlier minimal research agent (kept for reference)
 #   "base_research_agent"   — deployable research/writer agent (used by NB06 / deploy)
@@ -16,7 +16,7 @@ ACTIVE_AGENT = "client_research_agent"
 
 # LangSmith project name used across notebooks. Override per-environment via
 # the LANGSMITH_PROJECT env var.
-PROJECT_NAME = os.getenv("LANGSMITH_PROJECT", "langsmith-poc-tour")
+PROJECT_NAME = os.getenv("LANGSMITH_PROJECT", "langsmith-poc")
 
 
 def load_active_agent():
