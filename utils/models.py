@@ -10,10 +10,10 @@ load_dotenv(dotenv_path="../.env", override=True)
 from langchain.chat_models import init_chat_model
 
 # --- Default: OpenAI ---
-model = init_chat_model("openai:gpt-4.1-mini")
+# model = init_chat_model("openai:gpt-4.1-mini")
 
 # --- Anthropic ---
-# model = init_chat_model("anthropic:claude-sonnet-4-5")
+model = init_chat_model("anthropic:claude-sonnet-4-6")
 
 # --- Azure OpenAI ---
 # from langchain_openai import AzureChatOpenAI
