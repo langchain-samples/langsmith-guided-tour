@@ -6,7 +6,6 @@ Internal-facing knowledge agent for a wealth management firm. Demonstrates:
 - Custom tools (web_search, get_client_profile)
 - Research subagent for delegated work
 - CompositeBackend: FilesystemBackend for skills/AGENTS.md, StoreBackend for /memories/
-- Human-in-the-loop on file writes
 """
 
 import os
@@ -112,5 +111,4 @@ agent = create_deep_agent(
     skills=["./skills/"],
     subagents=[research_subagent],
     backend=backend_factory,
-    interrupt_on={"write_file": True, "edit_file": True},
 )
