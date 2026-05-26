@@ -15,16 +15,18 @@ agents/deployable_agents/<use_case>/skills/<skill>/SKILL.md    (NEW per skill fr
 utils/config.py                                                (MODIFIED — load_active_agent branch + defaults)
 langgraph.json                                                 (MODIFIED — add new graph entry)
 modules/00_setup.ipynb                                         (MODIFIED — Module Map labels)
-modules/01_build_a_deep_agent.ipynb                            (MODIFIED — substantial)
+modules/01_build_a_deep_agent_optional.ipynb                   (MODIFIED — substantial)
 modules/02_tracing.ipynb                                       (MODIFIED — warm-up prompts)
-modules/03_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
-modules/04_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
-modules/05_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
-modules/06_deploy.ipynb                                        (MODIFIED — §8 + deploy name)
-modules/07_finding_failure_modes.ipynb                         (MODIFIED — Polly examples)
+modules/03_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
+modules/04_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
+modules/05_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
+modules/06_deploy_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
+modules/07_finding_failure_modes.ipynb                         (MODIFIED — Chat examples)
 ```
 
 `agents/deployable_agents/base_research_agent/` is not touched — it serves as the baseline reference for the deployable agent shape.
+
+Modules 01 and 06 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 06 covers deployment, which only applies if the customer has LangSmith Deployments permissions.
 
 ## Per-notebook detail
 
@@ -32,14 +34,14 @@ modules/07_finding_failure_modes.ipynb                         (MODIFIED — Pol
 
 Minimal change. The keys table, the model-provider note, the LangSmith API key creation steps, and the troubleshooting section stay generic across customizations. Only update:
 
-- **Module Map table** (cell 2): row labels may briefly mention the use case if it adds clarity. The notebook references — `01_build_a_deep_agent.ipynb` etc. — stay the same.
+- **Module Map table** (cell 2): row labels may briefly mention the use case if it adds clarity. The notebook references — `01_build_a_deep_agent_optional.ipynb` etc. — stay the same.
 
-### NB01 — Build a Deep Agent
+### NB01 — Build a Deep Agent (optional)
 
-Substantial. The notebook walks through deep-agent capabilities section-by-section: 1.1 (bare agent / built-in filesystem) → 1.2 (custom tools) → 1.3 (subagents) → 1.4 (backends + memory) → 1.5 (middleware) → 1.6 (HITL) → 1.7 (AGENTS.md + skills) → 1.8 (complete agent). Inspect the baseline `modules/01_build_a_deep_agent.ipynb` to confirm the section structure before editing. Swap:
+Substantial. The notebook walks through deep-agent capabilities section-by-section: 1.1 (bare agent / built-in filesystem) → 1.2 (custom tools) → 1.3 (subagents) → 1.4 (backends + memory) → 1.5 (middleware) → 1.6 (HITL) → 1.7 (AGENTS.md + skills) → 1.8 (complete agent). Inspect the baseline `modules/01_build_a_deep_agent_optional.ipynb` to confirm the section structure before editing. Swap:
 
-- **§1.2 import line:** `from agents.<use_case>_agent import <tool1>, <tool2>`
-- **§1.2 tool printouts:** print names and descriptions of the new tools.
+- **§1.2 inline `web_search` definition:** keep the `@tool` pattern, swap the body if your domain uses a different search/lookup pattern.
+- **§1.3 imported tool:** `from agents.<use_case>_agent import <lookup_tool>` (e.g., `get_client_profile` → `get_case_history` for the new domain).
 - **§1.3 research subagent** definition: domain-flavor the system prompt (e.g., "research assistant for a wealth management firm" → "research assistant for an insurance carrier").
 - **§1.3 main agent system_prompt:** match the deployable's identity language.
 - **All demo prompts** (1.1 haiku can stay neutral; 1.2–1.8 should use new use case queries from Phase 1 step 4).
@@ -58,28 +60,7 @@ Light. Swap:
 - **Filter examples:** stay generic. If the research subagent has a non-default name (rare), update the by-name filter example (`eq(name, "research-agent")` → new name).
 - **Screenshot placeholders:** stay as-is. DE captures their own screenshots.
 
-### NB03 — Online Evaluations
-
-Significant. Swap:
-
-- **`judge_prompt`:** rewrite to enforce the eval criteria from Phase 1 step 5. Each criterion gets one bullet in the prompt.
-- **`judge_schema`:** the `correctness` boolean + `comment` string shape is generic. The `description` field on the schema should reflect the new domain.
-- **Trigger prompts (Step 3):** use new use case queries. Include a mix of well-formed and edge-case prompts.
-- **`display_name`** in `create_run_rule`: `<use_case>-online-correctness`.
-
-Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB04's annotation queue stays empty.
-
-### NB04 — Annotation Queues
-
-Light. Swap:
-
-- **Queue name** in `get_or_create_annotation_queue`: `<use_case>-needs-review`.
-- **Routing rule `display_name`:** `<use_case>-route-failures`.
-- **Trigger prompts (Step 3):** updated to invite domain-specific failure modes — unknown identifiers, unanswerable specifics, future predictions if relevant to the domain.
-
-The caveat about empty queues stays as-is — applies universally.
-
-### NB05 — Datasets and Experiments
+### NB03 — Datasets and Experiments
 
 Largest swap. **Approval gate 3 fires here.**
 
@@ -98,46 +79,75 @@ Largest swap. **Approval gate 3 fires here.**
 
 - **Part 2 judge:** the `CorrectnessGrade` TypedDict + `correctness_judge_prompt` rewrite to enforce the eval criteria. The "rubric is success criteria, not literal text" framing in the prompt stays.
 
-### NB06 — Deploy
+### NB04 — Online Evaluations
+
+Significant. Swap:
+
+- **`judge_prompt`:** rewrite to enforce the eval criteria from Phase 1 step 5. Each criterion gets one bullet in the prompt.
+- **`judge_schema`:** the `correctness` boolean + `comment` string shape is generic. The `description` field on the schema should reflect the new domain.
+- **Trigger prompts (Step 3):** use new use case queries. Include a mix of well-formed and edge-case prompts.
+- **`display_name`** in `create_run_rule`: `<use_case>-online-correctness`.
+
+Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB05's annotation queue stays empty.
+
+### NB05 — Annotation Queues
+
+Light. Swap:
+
+- **Queue name** in `get_or_create_annotation_queue`: `<use_case>-needs-review`.
+- **Routing rule `display_name`:** `<use_case>-route-failures`.
+- **Trigger prompts (Step 3):** updated to invite domain-specific failure modes — unknown identifiers, unanswerable specifics, future predictions if relevant to the domain.
+
+The caveat about empty queues stays as-is — applies universally.
+
+### NB06 — Deploy (optional)
 
 Update in two places:
 
 - **`langgraph deploy` command (`!cd ... && langgraph deploy --name ...`):** the deployment name uses `langsmith-poc-<use_case>`.
-- **§8 test query checklist:** replace with 12 use-case-specific queries spanning four shapes (3 each):
+- **§7 test query checklist:** replace with 12 use-case-specific queries spanning four shapes (3 each):
   1. **Profile / lookup only** — one query per demo record from Phase 1 step 3.
   2. **Research only** — diverse domain topics.
   3. **Multi-step** — at least one with a file write to exercise HITL.
   4. **Edge cases** — unknown entity, unanswerable specifics, speculative refusal.
 - **"What to watch for" guidance:** reference the new trajectory shapes and the agent's specific edge-case behaviors (e.g., "unknown-entity handling should report not found, not fabricate").
 
-The capability table (§7) and operational follow-ups stay as-is.
+The capability table (§6) and operational follow-ups stay as-is.
 
 ### NB07 — Finding Failure Modes
 
 Light. Almost everything generalizes. Swap:
 
-- **Polly section example questions:** use domain-specific examples (e.g., "did any users get an unknown-<entity> response?", "what's the latency distribution for runs that delegated to the research subagent?"). Two or three example questions is enough.
-- **Polly screenshot placeholder caption:** mention the new domain in the alt text if useful.
+- **Chat section example questions:** use domain-specific examples (e.g., "did any users get an unknown-<entity> response?", "what's the latency distribution for runs that delegated to the research subagent?"). Two or three example questions is enough.
+- **Chat screenshot placeholder caption:** mention the new domain in the alt text if useful.
 
-The concept intro on the shift in scale, the Insights configuration steps, the Engine cloud-only callout, and the closing recap all describe LangSmith features that work identically across use cases. Leave them alone.
+The concept intro on the shift in scale, the Insights configuration steps, the Engine availability callout, and the closing recap all describe LangSmith features that work identically across use cases. Leave them alone.
 
 ## Image / screenshot placeholders
 
 The baseline notebooks reference these image paths. The DE captures screenshots from their LangSmith UI against the customized agent — the paths themselves don't change.
 
 ```
-images/02-traces-list.png
-images/02-filter-bar.png
+images/warm_up_traces.png
+images/filter_traces.png
+images/dataset.png
+images/experiment_result.png
+images/experiments_page.png
+images/experiment_comparison.png
+images/set_baseline_button.png
+images/set_baseline.png
 images/03-rule-editor.png
-images/03-scored-trace.png
-images/04-queue-review.png
-images/05-dataset-view.png
-images/05-experiment-compare.png
-images/06-studio-ui.png
-images/07-polly-panel.png
-images/07-insights-config.png
-images/07-insights-report.png
-images/07-engine-issue.png
+images/online_evals.png
+images/annotation_queue.png
+images/deployment_home.png
+images/deployment_docs.png
+images/Studio_testing.png
+images/chat.png
+images/insights_config.png
+images/insights_report.png
+images/engine_config.png
+images/engine_issue.png
+images/engine_triage.png
 ```
 
-Some screenshots in NB01 (`deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`) and NB05 (`final-response.png`, `single-step.png`, `trajectory.png`) are conceptual diagrams. They generalize across use cases — leave them as referenced.
+Some screenshots in NB01 (`deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`) and NB03 (`final-response.png`, `single-step.png`, `trajectory.png`) are conceptual diagrams. They generalize across use cases — leave them as referenced.
