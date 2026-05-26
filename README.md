@@ -1,6 +1,6 @@
 # LangSmith POC Modules
 
-Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC. The modules cover the full agent engineering loop — build, trace, evaluate, deploy, and surface failure modes — against a single example agent (client research for a wealth management firm).
+Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC. The modules cover the full agent engineering loop — build, trace, evaluate, deploy, and surface failure modes — against a single example agent.
 
 ## The Modules
 
@@ -133,7 +133,7 @@ langsmith-guided-tour/
 
 ## Customizing for a New Domain
 
-The repo ships specialized for a client research use case (wealth management). To adapt it for a different industry or use case, see the `customize-poc` skill at `skills/customize-poc/`. The skill walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
+The repo ships specialized for a client research use case. To adapt it for a different industry or use case, see the `customize-poc` skill at `skills/customize-poc/`. The skill walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
 
 ## Common Issues
 
