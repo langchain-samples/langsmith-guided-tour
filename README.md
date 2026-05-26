@@ -133,7 +133,35 @@ langsmith-guided-tour/
 
 ## Customizing for a New Domain
 
-The repo ships specialized for a client research use case. To adapt it for a different industry or use case, see the `customize-poc` skill at `skills/customize-poc/`. The skill walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
+The repo ships specialized for a client research use case. To adapt it for a different industry or use case, the `customize-poc` skill at `skills/customize-poc/` walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
+
+### Workflow
+
+1. **Clone the repo:**
+   ```bash
+   git clone https://github.com/langchain-samples/langsmith-guided-tour.git
+   cd langsmith-guided-tour
+   ```
+
+2. **Create a branch for your variant.** Use the `examples/<vertical>` naming convention (e.g., `examples/insurance-claims`, `examples/legal-contracts`):
+   ```bash
+   git checkout -b examples/<your-vertical>
+   ```
+
+3. **Open the repo in a coding agent** and invoke the `customize-poc` skill. The skill auto-loads from `.claude/skills/customize-poc/` in any Claude Code session opened on this repo — start the session, then ask the agent to invoke `customize-poc`.
+
+4. **Answer the discovery questions.** The skill asks seven structured follow-ups one at a time (persona, tools, demo data, example queries, eval criteria, deployable identity, skills). Three approval checkpoints — after the spec, after the agent code, before the dataset — catch misunderstandings before they propagate through the notebooks.
+
+5. **Review the output.** The skill runs validation at the end (import probes, notebook syntax checks, residual-content greps). Spot-check a few notebook cells for tone and accuracy before committing.
+
+6. **Commit and push:**
+   ```bash
+   git add -A
+   git commit -m "Add <your-vertical> variant"
+   git push origin examples/<your-vertical>
+   ```
+
+To contribute a new example back to the samples repo, open a PR against `main`. To keep the variant private (customer-specific work, internal POCs), fork this repo into your own org first and push the branch there.
 
 ## Common Issues
 
