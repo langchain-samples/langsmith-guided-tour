@@ -97,6 +97,8 @@ See `notebook-customization-guide.md` (in this skill directory) for per-notebook
 | Deriving UI deep links from the API endpoint host | Hardcode `https://smith.langchain.com` for cloud; confirm the self-hosted UI host with the workspace operator |
 | Casual tone ("Let's...", "Now we'll...", exclamation points) | Match the formal, declarative voice in any baseline `modules/*.ipynb` cell 0 |
 | Generating all phases without checkpointing | Three approval gates exist for a reason: spec, agent code, dataset. Do not skip. |
+| f-strings broken in notebook cell source | Write cell source as a **list of strings, one per line** — never as a single multi-line string. A single-string source causes Python `\n` escape sequences to become literal newlines, producing unterminated f-strings that fail `ast.parse` |
+| Syntax check misses mixed shell magic cells | Skip cells where **any** line starts with `!`, not just the first — use `any(line.startswith('!') for line in src.splitlines())`. Many cells mix a comment line with a `!langgraph` or `!cd` command |
 
 ## Reference
 

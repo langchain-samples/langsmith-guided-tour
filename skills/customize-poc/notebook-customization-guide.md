@@ -2,6 +2,14 @@
 
 Companion to the `customize-poc` skill. Per-notebook customization detail for Phase 4 of the workflow.
 
+## Notebook editing mechanics
+
+Two patterns that cause silent failures if ignored:
+
+**Write source as a list of lines, not one string.** Each cell's `source` field in the `.ipynb` JSON should be a list of strings, one per line (each ending with `\n` except the last). Writing it as a single multi-line string causes Python escape sequences like `\n` inside f-strings to become literal newlines in the cell source, producing syntax errors that only surface during `ast.parse` validation.
+
+**Skip Jupyter magic lines in the syntax check.** Cells containing `!` shell commands are not valid Python. Skip any cell where `any(line.startswith('!') for line in src.splitlines())` — the check must look at all lines, not just the first, because many cells mix a comment line with a shell command.
+
 ## File map
 
 The customization touches these files. Anything not listed stays untouched.
