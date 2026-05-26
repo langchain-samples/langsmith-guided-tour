@@ -26,7 +26,7 @@ modules/07_finding_failure_modes.ipynb                         (MODIFIED — Cha
 
 `agents/deployable_agents/base_research_agent/` is not touched — it serves as the baseline reference for the deployable agent shape.
 
-Modules 01 and 06 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 06 covers deployment, which only applies if the customer has LangSmith Deployments permissions.
+Modules 01 and 06 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 06 covers deployment, which requires LangSmith Deployments permissions to actually run.
 
 ## Per-notebook detail
 
@@ -58,7 +58,7 @@ Light. Swap:
 
 - **Warm-up prompts (cell 4):** pick 5 from Phase 1 step 4 with varied shapes (single-tool, lookup-only, multi-step, edge case, simple research). The diversity matters — the filter DSL examples need different trace shapes to demonstrate against.
 - **Filter examples:** stay generic. If the research subagent has a non-default name (rare), update the by-name filter example (`eq(name, "research-agent")` → new name).
-- **Screenshot placeholders:** stay as-is. DE captures their own screenshots.
+- **Screenshot placeholders:** stay as-is. Capture screenshots separately against the customized agent's LangSmith UI.
 
 ### NB03 — Datasets and Experiments
 
@@ -125,7 +125,7 @@ The concept intro on the shift in scale, the Insights configuration steps, the E
 
 ## Image / screenshot placeholders
 
-The baseline notebooks reference these image paths. The DE captures screenshots from their LangSmith UI against the customized agent — the paths themselves don't change.
+The baseline notebooks reference these image paths. Screenshots are captured from the LangSmith UI of the customized agent — the paths themselves don't change.
 
 ```
 images/warm_up_traces.png

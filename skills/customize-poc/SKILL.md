@@ -1,6 +1,6 @@
 ---
 name: customize-poc
-description: Use when adapting the langsmith-guided-tour repo for a specific industry or customer use case — triggered by "create a [domain] version of this repo", "customize this for [vertical] POC", "make a [use case] variant of the workshop", or working in a fresh clone of the langsmith-guided-tour template with intent to specialize the example agent and all eight notebook modules at once. Not for single-module edits.
+description: Use when adapting the langsmith-guided-tour repo for a specific industry or domain-specific use case — triggered by "create a [domain] version of this repo", "customize this for [vertical] POC", "make a [use case] variant of the workshop", or working in a fresh clone of the langsmith-guided-tour template with intent to specialize the example agent and all eight notebook modules at once. Not for single-module edits.
 ---
 
 # Customizing the LangSmith POC Modules
@@ -9,7 +9,7 @@ description: Use when adapting the langsmith-guided-tour repo for a specific ind
 
 This skill operates on a clean clone of the langsmith-guided-tour template repo. It produces a specialized variant for a specific industry / use case by replacing the example agent, demo data, dataset, judge criteria, and notebook prompts — while preserving the module structure, code conventions, and tone calibrated for engineers evaluating LangSmith.
 
-The skill drives the customization interactively: the DE provides a brief use case description, the skill asks 7 structured follow-ups one at a time, then executes the customization end-to-end with three approval checkpoints.
+The skill drives the customization interactively: the user provides a brief use case description, the skill asks 7 structured follow-ups one at a time, then executes the customization end-to-end with three approval checkpoints.
 
 When invoked, **immediately use TodoWrite** to create one task per phase (Discovery / Agent code / Wiring / Notebooks / Validation). Track progress as each completes.
 
@@ -17,7 +17,7 @@ When invoked, **immediately use TodoWrite** to create one task per phase (Discov
 
 Triggers:
 - Working in a fresh clone of `langsmith-guided-tour` and asked to "make this for [domain]"
-- DE explicitly requests a deep-agent use case variant of the workshop content
+- Explicitly requested: produce a deep-agent use case variant of the workshop content
 - Any time the example agent, dataset, or judge criteria must swap across all eight modules
 
 Not for:
@@ -35,25 +35,25 @@ Read all five before generating any content. Violating these triggers rework.
 
 3. **Never use "tour" or "workshop" in user-facing content.** The repo name is for branding only. Content uses "modules" or "POC". Default `PROJECT_NAME` in `utils/config.py`: `langsmith-poc-<use_case>`, never `langsmith-tour-...` or `*-workshop-*`.
 
-4. **DE prep ≠ customer surface.** Customer-facing notebooks must not include DE-only setup. `ACTIVE_AGENT` selection, `PROJECT_NAME` selection, repo-structure tours are configured by the DE before sharing — never asked of the customer reading the notebooks.
+4. **Customization is one-time; the notebooks aren't.** The notebooks are read and run by humans after customization is complete; they should not include configuration steps this skill already handled. `ACTIVE_AGENT` selection, `PROJECT_NAME` defaults, and repo-structure tours are set once during customization and should never appear as steps the reader has to perform.
 
-5. **LangSmith URLs distinct.** `api.smith.langchain.com` is the API endpoint; `smith.langchain.com` is the UI host. Hardcode the UI host for cloud deep links. Never derive UI links by string-munging the API endpoint. For self-hosted, expect them to differ similarly — require DE confirmation of the UI host.
+5. **LangSmith URLs distinct.** `api.smith.langchain.com` is the API endpoint; `smith.langchain.com` is the UI host. Hardcode the UI host for cloud deep links. Never derive UI links by string-munging the API endpoint. For self-hosted, expect them to differ similarly — confirm the UI host with the workspace operator before hardcoding.
 
 ## Workflow
 
 ### Phase 1 — Discovery
 
-Ask the DE for a 1–3 sentence use case description. Then ask the seven structured follow-ups **one at a time**, capturing the answer before moving on. Do not ask them as a batch — the answers compound and the DE benefits from incremental thinking.
+Ask the user for a 1–3 sentence use case description. Then ask the seven structured follow-ups **one at a time**, capturing the answer before moving on. Do not ask them as a batch — the answers compound and incremental thinking produces better answers.
 
 1. **Persona** — who uses the agent? (e.g., wealth advisor, claims adjuster, compliance analyst)
 2. **Tools** — what tools does the agent need? `web_search` (Tavily-backed) is almost always included; add one domain-specific lookup tool (e.g., `get_client_profile`, `get_case_history`, `lookup_policy`). Confirm tool names + parameter signatures.
 3. **Demo data** — schema for the lookup tool + 3 example records spanning typical domain variety (small / medium / large, simple / complex, etc.).
 4. **Example queries** — 8–12 sample queries the agent should handle, covering single-tool, multi-step, and edge-case shapes. These seed warm-up prompts (NB02), dataset examples (NB05), Studio test queries (NB06), and AQ trigger prompts (NB04).
 5. **Eval criteria** — 2–4 criteria the LLM judge should enforce (e.g., cited sources, no fabricated entities, no future predictions, regulatory compliance).
-6. **Deployable identity** — AGENTS.md content: identity sentence, workflow steps, rules. Draft from above; confirm with DE.
+6. **Deployable identity** — AGENTS.md content: identity sentence, workflow steps, rules. Draft from above; confirm with the user.
 7. **Skills** — 1–2 on-demand skills the deployable should expose (e.g., `client-brief`, `claim-summary`, `policy-comparison`).
 
-After capturing all seven, **summarize the spec back to the DE in plain prose**. This is **approval gate 1** — catches misunderstandings cheaply before any code is written.
+After capturing all seven, **summarize the spec back to the user in plain prose**. This is **approval gate 1** — catches misunderstandings cheaply before any code is written.
 
 ### Phase 2 — Agent code
 
@@ -67,7 +67,7 @@ Create two parallel agent implementations:
 
 The demo data dict is **duplicated** in both agent files — this matches the existing repo pattern of self-contained agent modules. Do not import the data between files.
 
-**Approval gate 2** after writing the agent files: show both to the DE before continuing to wiring + notebooks.
+**Approval gate 2** after writing the agent files: show both to the user before continuing to wiring + notebooks.
 
 ### Phase 3 — Wiring
 
@@ -93,8 +93,8 @@ See `notebook-customization-guide.md` (in this skill directory) for per-notebook
 | "Tour" or "workshop" in user-facing content | Repo name is branding only; content is "modules" or "POC" |
 | Trying to evaluate the deployable variant in NB02–NB05 | NB02–NB05 use the eval-safe variant via `load_active_agent()`; the deployable's HITL breaks evals |
 | Importing demo data between agent files (DRY temptation) | Keep demo data inline in each agent file — matches existing pattern, keeps modules self-contained |
-| Customer-facing notebooks referencing `ACTIVE_AGENT` / `PROJECT_NAME` selection | DE configures these once before sharing; customer notebooks just import and run |
-| Deriving UI deep links from the API endpoint host | Hardcode `https://smith.langchain.com` for cloud; require DE confirmation of self-hosted UI host |
+| Notebooks asking the reader to choose `ACTIVE_AGENT` / `PROJECT_NAME` | These are configured once during customization; the resulting notebooks just import and run |
+| Deriving UI deep links from the API endpoint host | Hardcode `https://smith.langchain.com` for cloud; confirm the self-hosted UI host with the workspace operator |
 | Casual tone ("Let's...", "Now we'll...", exclamation points) | Match the formal, declarative voice in any baseline `modules/*.ipynb` cell 0 |
 | Generating all phases without checkpointing | Three approval gates exist for a reason: spec, agent code, dataset. Do not skip. |
 
