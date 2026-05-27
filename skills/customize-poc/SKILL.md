@@ -72,6 +72,7 @@ The demo data dict is **duplicated** in both agent files — this matches the ex
 ### Phase 3 — Wiring
 
 - `utils/config.py`: add a branch to `load_active_agent()` for the new agent, change `ACTIVE_AGENT` default to the new agent's identifier, update the docstring header to list it, change `PROJECT_NAME` default to a domain-specific value (e.g., `langsmith-poc-<use_case>`).
+- `utils/evaluators.py`: update `correctness_schema` — set the `description` field to reflect the new domain. The `correctness` boolean + `comment` string shape is generic; leave it unless the domain uses a different scoring structure.
 - `langgraph.json`: add a graph entry for the new deployable. Keep `base_research_agent` registered.
 
 ### Phase 4 — Notebook customization

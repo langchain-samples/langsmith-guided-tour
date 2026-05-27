@@ -21,6 +21,7 @@ agents/deployable_agents/<use_case>/AGENTS.md                  (NEW)
 agents/deployable_agents/<use_case>/deepagents.toml            (NEW)
 agents/deployable_agents/<use_case>/skills/<skill>/SKILL.md    (NEW per skill from Phase 1 step 7)
 utils/config.py                                                (MODIFIED — load_active_agent branch + defaults)
+utils/evaluators.py                                            (MODIFIED — correctness_schema description field)
 langgraph.json                                                 (MODIFIED — add new graph entry)
 modules/00_setup.ipynb                                         (MODIFIED — Module Map labels)
 modules/01_build_a_deep_agent_optional.ipynb                   (MODIFIED — substantial)
@@ -91,10 +92,13 @@ Largest swap. **Approval gate 3 fires here.**
 
 Significant. Swap:
 
-- **`judge_prompt`:** rewrite to enforce the eval criteria from Phase 1 step 5. Each criterion gets one bullet in the prompt.
-- **`judge_schema`:** the `correctness` boolean + `comment` string shape is generic. The `description` field on the schema should reflect the new domain.
-- **Trigger prompts (Step 3):** use new use case queries. Include a mix of well-formed and edge-case prompts.
+- **`judge_prompt`** (Section 2, Step 1 code cell): rewrite to enforce the eval criteria from Phase 1 step 5. Each criterion gets one bullet in the prompt.
 - **`display_name`** in `create_run_rule`: `<use_case>-online-correctness`.
+- **Trigger prompts (Step 3):** use new use case queries. Include a mix of well-formed and edge-case prompts.
+
+The output schema (`correctness_schema`) is defined in `utils/evaluators.py` and imported into the notebook — update it there during Phase 3. The `description` field should reflect the new domain; the `correctness` boolean + `comment` string shape is generic and usually stays as-is.
+
+Section 1 (UI walkthrough) is generic — the step-by-step instructions and image placeholders apply identically across use cases. Leave it untouched.
 
 Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB05's annotation queue stays empty.
 
