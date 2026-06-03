@@ -9,17 +9,17 @@ Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC.
 | **00** | Setup — env, keys, service verification | `modules/00_setup.ipynb` | ~10 min |
 | **01** | Build a Deep Agent — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills (optional) | `modules/01_build_a_deep_agent_optional.ipynb` | ~45 min |
 | **02** | Tracing — generate traces and query them with `list_runs` + filter DSL | `modules/02_tracing.ipynb` | ~20 min |
-| **03** | Datasets and Experiments — offline evaluation: final-response, single-step, trajectory | `modules/03_datasets_and_experiments.ipynb` | ~30 min |
-| **04** | Online Evaluations — LLM-as-judge run rules that score new traces automatically | `modules/04_online_evals.ipynb` | ~25 min |
-| **05** | Annotation Queues — route low-scoring runs to human review | `modules/05_annotation_queues.ipynb` | ~20 min |
-| **06** | Deploy — ship the agent via LangSmith Deployments using the `langgraph` CLI (optional) | `modules/06_deploy_optional.ipynb` | ~25 min |
-| **07** | Finding Failure Modes — Chat, Insights Agent, and Engine | `modules/07_finding_failure_modes.ipynb` | ~30 min |
+| **03** | Finding Failure Modes — Chat, Insights Agent, and Engine | `modules/03_finding_failure_modes.ipynb` | ~30 min |
+| **04** | Datasets and Experiments — offline evaluation: final-response, single-step, trajectory | `modules/04_datasets_and_experiments.ipynb` | ~30 min |
+| **05** | Online Evaluations — LLM-as-judge run rules that score new traces automatically | `modules/05_online_evals.ipynb` | ~25 min |
+| **06** | Annotation Queues — route low-scoring runs to human review | `modules/06_annotation_queues.ipynb` | ~20 min |
+| **07** | Deploy — ship the agent via LangSmith Deployments using the `langgraph` CLI (optional) | `modules/07_deploy_optional.ipynb` | ~25 min |
 
-Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 06) is ~2 hours.
+Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 07) is ~2 hours.
 
 **Optional modules** are tagged `_optional` in the filename:
 - **Module 01** introduces the `deepagents` framework from scratch. Skip if already familiar with custom tools, subagents, and prompts.
-- **Module 06** covers deployment via LangSmith. Skip if you don't have deployment permissions or are using LangSmith strictly for observability and evaluations.
+- **Module 07** covers deployment via LangSmith. Skip if you don't have deployment permissions or are using LangSmith strictly for observability and evaluations.
 
 The remaining modules form the core observability + evaluation loop.
 
@@ -81,9 +81,9 @@ model = init_chat_model("anthropic:claude-sonnet-4-6")
 
 Then set the matching API key environment variable in `.env`. See `.env.example` for the full set of supported provider variables.
 
-## Deploy (Module 06)
+## Deploy (Module 07)
 
-Module 06 deploys the agent at `agents/deployable_agents/client_research/` to LangSmith via the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 07 deploys the agent at `agents/deployable_agents/client_research/` to LangSmith via the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
 
 Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token.
 
@@ -120,11 +120,11 @@ langsmith-guided-tour/
 │   ├── 00_setup.ipynb
 │   ├── 01_build_a_deep_agent_optional.ipynb
 │   ├── 02_tracing.ipynb
-│   ├── 03_datasets_and_experiments.ipynb
-│   ├── 04_online_evals.ipynb
-│   ├── 05_annotation_queues.ipynb
-│   ├── 06_deploy_optional.ipynb
-│   └── 07_finding_failure_modes.ipynb
+│   ├── 03_finding_failure_modes.ipynb
+│   ├── 04_datasets_and_experiments.ipynb
+│   ├── 05_online_evals.ipynb
+│   ├── 06_annotation_queues.ipynb
+│   └── 07_deploy_optional.ipynb
 └── skills/
     └── customize-poc/                         (Claude Code skill for adapting this repo to a new domain)
         ├── SKILL.md

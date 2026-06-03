@@ -48,7 +48,7 @@ Ask the user for a 1–3 sentence use case description. Then ask the seven struc
 1. **Persona** — who uses the agent? (e.g., wealth advisor, claims adjuster, compliance analyst)
 2. **Tools** — what tools does the agent need? `web_search` (Tavily-backed) is almost always included; add one domain-specific lookup tool (e.g., `get_client_profile`, `get_case_history`, `lookup_policy`). Confirm tool names + parameter signatures.
 3. **Demo data** — schema for the lookup tool + 3 example records spanning typical domain variety (small / medium / large, simple / complex, etc.).
-4. **Example queries** — 8–12 sample queries the agent should handle, covering single-tool, multi-step, and edge-case shapes. These seed warm-up prompts (NB02), dataset examples (NB05), Studio test queries (NB06), and AQ trigger prompts (NB04).
+4. **Example queries** — 8–12 sample queries the agent should handle, covering single-tool, multi-step, and edge-case shapes. These seed warm-up prompts (NB02), dataset examples (NB04), Studio test queries (NB07), and AQ trigger prompts (NB06).
 5. **Eval criteria** — 2–4 criteria the LLM judge should enforce (e.g., cited sources, no fabricated entities, no future predictions, regulatory compliance).
 6. **Deployable identity** — AGENTS.md content: identity sentence, workflow steps, rules. Draft from above; confirm with the user.
 7. **Skills** — 1–2 on-demand skills the deployable should expose (e.g., `client-brief`, `claim-summary`, `policy-comparison`).
@@ -77,7 +77,7 @@ The demo data dict is **duplicated** in both agent files — this matches the ex
 
 ### Phase 4 — Notebook customization
 
-See `notebook-customization-guide.md` (in this skill directory) for per-notebook details and the file map. NB05's dataset examples encode the eval semantics for the rest of the loop — **approval gate 3** before generating that notebook.
+See `notebook-customization-guide.md` (in this skill directory) for per-notebook details and the file map. NB04's dataset examples encode the eval semantics for the rest of the loop — **approval gate 3** before generating that notebook.
 
 ### Phase 5 — Validation
 
@@ -92,7 +92,7 @@ See `notebook-customization-guide.md` (in this skill directory) for per-notebook
 |---|---|
 | Verbose docstrings or multi-paragraph comments | Match `agents/research_agent.py` exactly — terse, no bullet lists in module docstrings |
 | "Tour" or "workshop" in user-facing content | Repo name is branding only; content is "modules" or "POC" |
-| Trying to evaluate the deployable variant in NB02–NB05 | NB02–NB05 use the eval-safe variant via `load_active_agent()`; the deployable's HITL breaks evals |
+| Trying to evaluate the deployable variant in NB02–NB06 | NB02–NB06 use the eval-safe variant via `load_active_agent()`; the deployable's HITL breaks evals |
 | Importing demo data between agent files (DRY temptation) | Keep demo data inline in each agent file — matches existing pattern, keeps modules self-contained |
 | Notebooks asking the reader to choose `ACTIVE_AGENT` / `PROJECT_NAME` | These are configured once during customization; the resulting notebooks just import and run |
 | Deriving UI deep links from the API endpoint host | Hardcode `https://smith.langchain.com` for cloud; confirm the self-hosted UI host with the workspace operator |
@@ -104,4 +104,4 @@ See `notebook-customization-guide.md` (in this skill directory) for per-notebook
 ## Reference
 
 - If a past customization exists on another branch or fork, inspect those files as a worked example — useful to see the full end-state of a typical customization before starting a new one.
-- LangSmith feature docs referenced by NB07: [Polly](https://docs.langchain.com/langsmith/polly), [Insights Agent](https://docs.langchain.com/langsmith/insights), [Engine](https://docs.langchain.com/langsmith/engine).
+- LangSmith feature docs referenced by NB03: [Polly](https://docs.langchain.com/langsmith/polly), [Insights Agent](https://docs.langchain.com/langsmith/insights), [Engine](https://docs.langchain.com/langsmith/engine).

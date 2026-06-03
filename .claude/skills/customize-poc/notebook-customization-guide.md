@@ -26,16 +26,16 @@ langgraph.json                                                 (MODIFIED — add
 modules/00_setup.ipynb                                         (MODIFIED — Module Map labels)
 modules/01_build_a_deep_agent_optional.ipynb                   (MODIFIED — substantial)
 modules/02_tracing.ipynb                                       (MODIFIED — warm-up prompts)
-modules/03_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
-modules/04_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
-modules/05_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
-modules/06_deploy_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
-modules/07_finding_failure_modes.ipynb                         (MODIFIED — Chat examples)
+modules/03_finding_failure_modes.ipynb                         (MODIFIED — Chat examples)
+modules/04_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
+modules/05_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
+modules/06_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
+modules/07_deploy_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
 ```
 
 `agents/deployable_agents/base_research_agent/` is not touched — it serves as the baseline reference for the deployable agent shape.
 
-Modules 01 and 06 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 06 covers deployment, which requires LangSmith Deployments permissions to actually run.
+Modules 01 and 07 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 07 covers deployment, which requires LangSmith Deployments permissions to actually run.
 
 ## Per-notebook detail
 
@@ -69,7 +69,16 @@ Light. Swap:
 - **Filter examples:** stay generic. If the research subagent has a non-default name (rare), update the by-name filter example (`eq(name, "research-agent")` → new name).
 - **Screenshot placeholders:** stay as-is. Capture screenshots separately against the customized agent's LangSmith UI.
 
-### NB03 — Datasets and Experiments
+### NB03 — Finding Failure Modes
+
+Light. Almost everything generalizes. Swap:
+
+- **Chat section example questions:** use domain-specific examples (e.g., "did any users get an unknown-<entity> response?", "what's the latency distribution for runs that delegated to the research subagent?"). Two or three example questions is enough.
+- **Chat screenshot placeholder caption:** mention the new domain in the alt text if useful.
+
+The concept intro on the shift in scale, the Insights configuration steps, the Engine availability callout, and the closing recap all describe LangSmith features that work identically across use cases. Leave them alone.
+
+### NB04 — Datasets and Experiments
 
 Largest swap. **Approval gate 3 fires here.**
 
@@ -88,7 +97,7 @@ Largest swap. **Approval gate 3 fires here.**
 
 - **Part 2 judge:** the `CorrectnessGrade` TypedDict + `correctness_judge_prompt` rewrite to enforce the eval criteria. The "rubric is success criteria, not literal text" framing in the prompt stays.
 
-### NB04 — Online Evaluations
+### NB05 — Online Evaluations
 
 Significant. Swap:
 
@@ -100,9 +109,9 @@ The output schema (`correctness_schema`) is defined in `utils/evaluators.py` and
 
 Section 1 (UI walkthrough) is generic — the step-by-step instructions and image placeholders apply identically across use cases. Leave it untouched.
 
-Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB05's annotation queue stays empty.
+Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB06's annotation queue stays empty.
 
-### NB05 — Annotation Queues
+### NB06 — Annotation Queues
 
 Light. Swap:
 
@@ -112,7 +121,7 @@ Light. Swap:
 
 The caveat about empty queues stays as-is — applies universally.
 
-### NB06 — Deploy (optional)
+### NB07 — Deploy (optional)
 
 Update in two places:
 
@@ -125,15 +134,6 @@ Update in two places:
 - **"What to watch for" guidance:** reference the new trajectory shapes and the agent's specific edge-case behaviors (e.g., "unknown-entity handling should report not found, not fabricate").
 
 The capability table (§6) and operational follow-ups stay as-is.
-
-### NB07 — Finding Failure Modes
-
-Light. Almost everything generalizes. Swap:
-
-- **Chat section example questions:** use domain-specific examples (e.g., "did any users get an unknown-<entity> response?", "what's the latency distribution for runs that delegated to the research subagent?"). Two or three example questions is enough.
-- **Chat screenshot placeholder caption:** mention the new domain in the alt text if useful.
-
-The concept intro on the shift in scale, the Insights configuration steps, the Engine availability callout, and the closing recap all describe LangSmith features that work identically across use cases. Leave them alone.
 
 ## Image / screenshot placeholders
 
@@ -162,4 +162,4 @@ images/engine_issue.png
 images/engine_triage.png
 ```
 
-Some screenshots in NB01 (`deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`) and NB03 (`final-response.png`, `single-step.png`, `trajectory.png`) are conceptual diagrams. They generalize across use cases — leave them as referenced.
+Some screenshots in NB01 (`deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`) and NB04 (`final-response.png`, `single-step.png`, `trajectory.png`) are conceptual diagrams. They generalize across use cases — leave them as referenced.
