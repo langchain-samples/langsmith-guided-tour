@@ -1,8 +1,7 @@
 {
   "dependencies": ["."],
   "graphs": {
-    "base_research_agent": "./agents/deployable_agents/base_research_agent/agent.py:agent",
-    "client_research": "./agents/deployable_agents/client_research/agent.py:agent"
+    "retail_assistant": "./agents/deployable_agents/retail_assistant/agent.py:agent"
   },
   "env": ".env"
 }
