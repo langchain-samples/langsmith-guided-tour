@@ -30,7 +30,7 @@ modules/03_finding_failure_modes.ipynb                         (MODIFIED — Cha
 modules/04_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
 modules/05_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
 modules/06_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
-modules/07_deploy_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
+modules/07_deploy_and_govern_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
 ```
 
 `agents/deployable_agents/base_research_agent/` is not touched — it serves as the baseline reference for the deployable agent shape.

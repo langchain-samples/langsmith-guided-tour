@@ -13,7 +13,7 @@ Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC.
 | **04** | Datasets and Experiments — offline evaluation: final-response, single-step, trajectory | `modules/04_datasets_and_experiments.ipynb` | ~30 min |
 | **05** | Online Evaluations — LLM-as-judge run rules that score new traces automatically | `modules/05_online_evals.ipynb` | ~25 min |
 | **06** | Annotation Queues — route low-scoring runs to human review | `modules/06_annotation_queues.ipynb` | ~20 min |
-| **07** | Deploy — ship the agent via LangSmith Deployments using the `langgraph` CLI (optional) | `modules/07_deploy_optional.ipynb` | ~25 min |
+| **07** | Deploy + Govern — apply workspace-level gateway policies and ship the agent via LangSmith Deployments (optional) | `modules/07_deploy_and_govern_optional.ipynb` | ~25 min |
 
 Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 07) is ~2 hours.
 
@@ -81,11 +81,11 @@ model = init_chat_model("anthropic:claude-sonnet-4-6")
 
 Then set the matching API key environment variable in `.env`. See `.env.example` for the full set of supported provider variables.
 
-## Deploy (Module 07)
+## Deploy + Govern (Module 07)
 
-Module 07 deploys the agent at `agents/deployable_agents/client_research/` to LangSmith via the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 07 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
 
-Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token.
+Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token. The gateway sections require `LANGSMITH_API_KEY_GATEWAY` (same value) and `WORKSPACE_ID` — see `.env.example`.
 
 ## Project Structure
 
@@ -124,7 +124,7 @@ langsmith-guided-tour/
 │   ├── 04_datasets_and_experiments.ipynb
 │   ├── 05_online_evals.ipynb
 │   ├── 06_annotation_queues.ipynb
-│   └── 07_deploy_optional.ipynb
+│   └── 07_deploy_and_govern_optional.ipynb
 └── skills/
     └── customize-poc/                         (Claude Code skill for adapting this repo to a new domain)
         ├── SKILL.md
