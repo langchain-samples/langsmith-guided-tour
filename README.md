@@ -6,14 +6,14 @@ Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC.
 
 | # | Module | Notebook | Duration |
 |---|--------|----------|----------|
-| **00** | Setup — env, keys, service verification | `modules/00_setup.ipynb` | ~10 min |
-| **01** | Build a Deep Agent — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills (optional) | `modules/01_build_a_deep_agent_optional.ipynb` | ~45 min |
-| **02** | Tracing — generate traces and query them with `list_runs` + filter DSL | `modules/02_tracing.ipynb` | ~20 min |
-| **03** | Finding Failure Modes — Chat, Insights Agent, and Engine | `modules/03_finding_failure_modes.ipynb` | ~30 min |
-| **04** | Datasets and Experiments — offline evaluation: final-response, single-step, trajectory | `modules/04_datasets_and_experiments.ipynb` | ~30 min |
-| **05** | Online Evaluations — LLM-as-judge run rules that score new traces automatically | `modules/05_online_evals.ipynb` | ~25 min |
-| **06** | Annotation Queues — route low-scoring runs to human review | `modules/06_annotation_queues.ipynb` | ~20 min |
-| **07** | Deploy + Govern — apply workspace-level gateway policies and ship the agent via LangSmith Deployments (optional) | `modules/07_deploy_and_govern_optional.ipynb` | ~25 min |
+| **00** | **Setup** — env, keys, service verification | [`modules/00_setup.ipynb`](modules/00_setup.ipynb) | ~10 min |
+| **01** | **Build a Deep Agent** — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills (optional) | [`modules/01_build_a_deep_agent_optional.ipynb`](modules/01_build_a_deep_agent_optional.ipynb) | ~45 min |
+| **02** | **Tracing** — generate traces and query them with `list_runs` + filter DSL | [`modules/02_tracing.ipynb`](modules/02_tracing.ipynb) | ~20 min |
+| **03** | **Finding Failure Modes** — Chat, Insights Agent, and Engine | [`modules/03_finding_failure_modes.ipynb`](modules/03_finding_failure_modes.ipynb) | ~30 min |
+| **04** | **Datasets and Experiments** — offline evaluation: final-response, single-step, trajectory | [`modules/04_datasets_and_experiments.ipynb`](modules/04_datasets_and_experiments.ipynb) | ~30 min |
+| **05** | **Online Evaluations** — LLM-as-judge run rules that score new traces automatically | [`modules/05_online_evals.ipynb`](modules/05_online_evals.ipynb) | ~25 min |
+| **06** | **Annotation Queues** — route low-scoring runs to human review | [`modules/06_annotation_queues.ipynb`](modules/06_annotation_queues.ipynb) | ~20 min |
+| **07** | **Deploy + Govern** — apply workspace-level gateway policies and ship the agent via LangSmith Deployments (optional) | [`modules/07_deploy_and_govern_optional.ipynb`](modules/07_deploy_and_govern_optional.ipynb) | ~25 min |
 
 Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 07) is ~2 hours.
 
