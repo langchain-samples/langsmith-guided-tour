@@ -41,6 +41,27 @@ from tavily import TavilyClient
 # --------------------------------------------------------------------------- #
 
 _FALLBACK_RESULTS: list[tuple[tuple[str, ...], list[tuple[str, str, str]]]] = [
+    (("retail media network", "retail media"), [
+        (
+            "Retail media networks — 2026 state of play",
+            "https://www.emarketer.com/topics/category/retail-media",
+            "Retail media is among the fastest-growing digital ad channels: retailers monetize "
+            "first-party shopper data through on-site placements, off-site campaigns, and in-store "
+            "screens. Spend keeps shifting toward sponsored-product and performance formats where "
+            "conversions are measurable, and advertisers increasingly demand incrementality "
+            "testing rather than last-click attribution."
+        ),
+    ]),
+    (("affiliate marketing", "performance marketing"), [
+        (
+            "Affiliate & performance marketing benchmarks",
+            "https://www.iab.com/insights/",
+            "Affiliate and performance programs reward partners on a cost-per-action basis, "
+            "aligning spend with incremental sales. Healthy programs pair publisher and creator "
+            "partnerships with clear attribution windows; commission rates vary by category and "
+            "margin, and retailers with higher gross margin can fund more aggressive payouts."
+        ),
+    ]),
     (("difference between langchain and langgraph", "langchain vs langgraph"), [
         (
             "LangChain vs LangGraph — when to use each",

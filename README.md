@@ -83,7 +83,7 @@ Then set the matching API key environment variable in `.env`. See `.env.example`
 
 ## Deploy + Govern (Module 07)
 
-Module 07 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 07 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `partner_growth` (the primary deployable) and `base_research_agent` (a second example for inspection).
 
 Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token. The gateway sections require `LANGSMITH_API_KEY_GATEWAY` (same value) and `WORKSPACE_ID` — see `.env.example`.
 
@@ -101,15 +101,15 @@ langsmith-guided-tour/
 │   ├── search.py                              (resilient Tavily wrapper with canned fallbacks)
 │   └── langsmith_rules.py                     (helpers for run rules + annotation queues)
 ├── agents/
-│   ├── client_research_agent.py               (eval-safe agent imported by Modules 02–05 via utils.config)
+│   ├── partner_growth_agent.py                (eval-safe agent imported by Modules 02–05 via utils.config)
 │   └── deployable_agents/
-│       ├── client_research/                   (deployable variant — AGENTS.md, skills, CompositeBackend)
+│       ├── partner_growth/                    (deployable variant — AGENTS.md, skills, CompositeBackend)
 │       │   ├── agent.py
 │       │   ├── AGENTS.md
 │       │   ├── deepagents.toml
 │       │   └── skills/
-│       │       ├── client-brief/SKILL.md
-│       │       └── portfolio-update/SKILL.md
+│       │       ├── account-brief/SKILL.md
+│       │       └── outreach-email/SKILL.md
 │       └── base_research_agent/               (second deployable, kept as reference)
 │           ├── agent.py
 │           ├── AGENTS.md
@@ -133,7 +133,7 @@ langsmith-guided-tour/
 
 ## Customizing for a New Domain
 
-The repo ships specialized for a client research use case. To adapt it for a different industry or use case, the `customize-poc` skill at `skills/customize-poc/` walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
+The repo ships specialized for a partner growth use case. To adapt it for a different industry or use case, the `customize-poc` skill at `skills/customize-poc/` walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
 
 ### Workflow
 
@@ -172,7 +172,7 @@ Your API key is a personal access token. Generate a service key (`lsv2_sk_...`) 
 Each module's setup cell prepends the repo root to `sys.path`. If you moved a notebook, update the `Path().resolve().parent` line to point at the repo root.
 
 **Anthropic API: `tool_use ids were found without tool_result blocks immediately after`**
-This appears if you submit a regular message to the deployed agent in Studio while a HITL interrupt is pending. The deployable variant in this repo ships without HITL — but if you re-add `interrupt_on={...}` to `agents/deployable_agents/client_research/agent.py`, send the resume command as a `Command(resume=...)` payload rather than plain text.
+This appears if you submit a regular message to the deployed agent in Studio while a HITL interrupt is pending. The deployable variant in this repo ships without HITL — but if you re-add `interrupt_on={...}` to `agents/deployable_agents/partner_growth/agent.py`, send the resume command as a `Command(resume=...)` payload rather than plain text.
 
 **Chat (Module 07) unavailable**
 The in-workspace AI assistant requires a model provider API key configured as a workspace secret in LangSmith **Settings**. Configure one before invoking Chat with `Cmd+I` / `Ctrl+I`.

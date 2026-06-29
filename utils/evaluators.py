@@ -5,13 +5,14 @@ online-evaluator API.  Centralising here lets the SDK rule registration and the
 notebook stay in sync with whatever the UI shows.
 """
 
-# JSON Schema for the client-research correctness evaluator.
+# JSON Schema for the partner-growth correctness evaluator.
 # Matches the online evaluator registered in modules/04_online_evals.ipynb.
 correctness_schema: dict = {
     "title": "correctness",
     "description": (
-        "Score whether the client research response is grounded, sourced, "
-        "and honest about unknown clients."
+        "Score whether the partner-growth response grounds its fit assessment in "
+        "the merchant's actual levers, cites external claims, and invents no "
+        "merchants, metrics, or ROI figures."
     ),
     "type": "object",
     "properties": {
