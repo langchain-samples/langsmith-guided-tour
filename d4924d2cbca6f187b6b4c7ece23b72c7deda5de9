@@ -1,0 +1,82 @@
+agents/deployable_agents/data_agent/AGENTS.md
+  s_df415b40e7d60b::t_b4056dc9154cca 1-7,10-15,17-25
+  s_df415b40e7d60b::t_88fac9ea7f058d 9
+  s_df415b40e7d60b::t_4737b7fe694706 16
+  s_df415b40e7d60b::t_7432fead98ede3 8
+langgraph.json
+  s_df415b40e7d60b::t_fbfb5d8bd67931 4
+agents/deployable_agents/data_agent/deepagents.toml
+  s_df415b40e7d60b::t_29e5f3ddbcaab0 3
+  s_df415b40e7d60b::t_e4b77375b5c980 1-2
+agents/deployable_agents/data_agent/skills/metric-definition/SKILL.md
+  s_df415b40e7d60b::t_a3011c621d0292 20
+  s_df415b40e7d60b::t_64245c69cc02c9 1-19,21-26
+agents/data_agent.py
+  s_df415b40e7d60b::t_28a85a607fc863 2,4
+  s_df415b40e7d60b::t_8c19303e1e7ca8 7
+  s_df415b40e7d60b::t_bf30aa6ead8f2b 130,132,135-136
+  s_df415b40e7d60b::t_992bd533b94e0c 142-143,152
+  s_df415b40e7d60b::t_749463490bbb9a 84-92,112
+  s_df415b40e7d60b::t_b61d2bd74628de 134,138,141,146,149-151
+  s_df415b40e7d60b::t_a32871a4a49227 153-155
+  s_df415b40e7d60b::t_b65651d72b001d 1,3,5-6,8-68,71-74,76-81,124-129,131,133,137,139-140,144-145,147-148,156-159
+  s_df415b40e7d60b::t_bd1e3f67544a82 69-70,75,82-83,93-111,113-123
+agents/deployable_agents/data_agent/skills/data-brief/SKILL.md
+  s_df415b40e7d60b::t_ed94cffaa1c162 10
+  s_df415b40e7d60b::t_b7249d1bb64d30 1-9,11-27
+utils/evaluators.py
+  s_df415b40e7d60b::t_b449ce19fa6962 8-9,13-14
+utils/config.py
+  s_df415b40e7d60b::t_160659d0e6743d 10-11,16,20,25-27
+utils/models.py
+  s_df415b40e7d60b::t_3ac2c08b2d582a 6
+  s_df415b40e7d60b::t_03398c5c0853a4 20
+  s_df415b40e7d60b::t_41bb9df0580f13 17
+  h_7cae82992be157 18,24-26
+  s_df415b40e7d60b::t_f7fe6bf515a67d 30-31
+agents/deployable_agents/data_agent/agent.py
+  s_df415b40e7d60b::t_e293990862c12a 92-100,120
+  s_df415b40e7d60b::t_da131eb119531a 136-137,139
+  s_df415b40e7d60b::t_ffc56923588500 153
+  s_df415b40e7d60b::t_48f91b95ef2a83 77-78,83,90-91,101-119,121-131,138,140
+  s_df415b40e7d60b::t_df9d20f59b98e4 6,13
+  s_df415b40e7d60b::t_af3eb2170d578e 152,156
+  s_df415b40e7d60b::t_d86bd8fd81e14d 1-5,7-12,14-76,79-82,84-89,132-135,141-151,154-155,157-163
+modules/00_setup.ipynb
+  s_df415b40e7d60b::t_b96c5313c3bf00 31
+modules/01_build_a_deep_agent_optional.ipynb
+  s_df415b40e7d60b::t_747ddc5c2f3fcd 7,29,164,172,178,186,194,214,222,236,256,293,299,305,313,321,327,333
+modules/02_tracing.ipynb
+  s_df415b40e7d60b::t_e94eb3f6288466 7,23,29,37,206,231
+modules/03_finding_failure_modes.ipynb
+  s_df415b40e7d60b::t_b6bbdfba121d3a 75,81,93
+modules/04_datasets_and_experiments.ipynb
+  s_df415b40e7d60b::t_3d05a1990d5dde 35,41,49,79,116,124,165,370
+modules/05_online_evals.ipynb
+  s_df415b40e7d60b::t_81b51e083474e6 23,109,117,135,161
+modules/06_annotation_queues.ipynb
+  s_df415b40e7d60b::t_5abb58f83d4621 23,74,88,102,108,116
+modules/07_deploy_and_govern_optional.ipynb
+  s_df415b40e7d60b::t_e31cdfb8194b10 54,62,68,76,90,97,105,129,135,149,155,169,207,213,219,225,231
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "d4924d2cbca6f187b6b4c7ece23b72c7deda5de9",
+  "prompts": {},
+  "humans": {
+    "h_7cae82992be157": {
+      "author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_df415b40e7d60b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f1d6075a-4d88-41d7-84fc-beb0f8a2607e",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
