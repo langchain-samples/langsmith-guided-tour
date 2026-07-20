@@ -1,0 +1,60 @@
+utils/search.py
+  s_39e62b9267d131::t_844e6b6603b329 33-36
+  s_39e62b9267d131::t_57f577ac5dadc4 179-184
+README.md
+  s_39e62b9267d131::t_25887c0abb083c 97
+  s_39e62b9267d131::t_a8b8b360584b73 12-16
+  s_39e62b9267d131::t_2c10eab8102846 123
+  s_39e62b9267d131::t_554fdf6863a3e7 119-122
+  s_39e62b9267d131::t_757968acf87261 11
+  s_39e62b9267d131::t_11c75808e7f079 18,20-21
+  s_39e62b9267d131::t_ec54a63f104d3c 80,82
+  s_39e62b9267d131::t_ba304ddd16140d 10
+  s_39e62b9267d131::t_7cd0a569405bf1 51,54
+  s_39e62b9267d131::t_a2c248be7d0494 117-118
+  s_39e62b9267d131::t_f22ff3f453af1f 100
+  s_39e62b9267d131::t_a06ba74b29a62c 63-64,66-67
+  s_39e62b9267d131::t_05e3b8e63a69b3 28
+  s_39e62b9267d131::t_4af45e7aea5fbe 29
+.env.example
+  s_39e62b9267d131::t_a1bab5316a56c8 13-15
+  h_7cae82992be157 7,10
+modules/00_setup.ipynb
+  s_39e62b9267d131::t_a2c248be7d0494 13,19,47,61,77,85,91,113,121,158,164
+  s_39e62b9267d131::t_51a50b5fac641d 7
+modules/01_build_a_deep_agent.ipynb
+  s_39e62b9267d131::t_a4276e748a3a37 164,172,305,333
+modules/03_tracing.ipynb
+  s_39e62b9267d131::t_769d7307e5a012 7,226,231
+modules/04_finding_failure_modes.ipynb
+  s_39e62b9267d131::t_05c5ff256c35ab 7,56,75,87,126,132,138
+modules/05_datasets_and_experiments.ipynb
+  s_39e62b9267d131::t_f5e42e94669cec 8,12,18,345
+modules/06_online_evals.ipynb
+  s_39e62b9267d131::t_65d4fcd507da8f 7,224,230
+modules/07_annotation_queues.ipynb
+  s_39e62b9267d131::t_7385322e15b058 7,74,80,95,102,108,182
+modules/02_deploy_and_govern.ipynb
+  s_39e62b9267d131::t_dbb723fd419a1a 7,23,76,213,225,231
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5709c73ca6b369b0fd3d1256c8314a1f51352d30",
+  "prompts": {},
+  "humans": {
+    "h_7cae82992be157": {
+      "author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_39e62b9267d131": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a460427-6ead-498e-9fd3-1842a70faa11",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
