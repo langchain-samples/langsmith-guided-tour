@@ -7,29 +7,26 @@ Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC.
 | # | Module | Notebook | Duration |
 |---|--------|----------|----------|
 | **00** | **Setup** — env, keys, service verification | [`modules/00_setup.ipynb`](modules/00_setup.ipynb) | ~10 min |
-| **01** | **Build a Deep Agent** — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills (optional) | [`modules/01_build_a_deep_agent_optional.ipynb`](modules/01_build_a_deep_agent_optional.ipynb) | ~45 min |
-| **02** | **Tracing** — generate traces and query them with `list_runs` + filter DSL | [`modules/02_tracing.ipynb`](modules/02_tracing.ipynb) | ~20 min |
-| **03** | **Finding Failure Modes** — Chat, Insights Agent, and Engine | [`modules/03_finding_failure_modes.ipynb`](modules/03_finding_failure_modes.ipynb) | ~30 min |
-| **04** | **Datasets and Experiments** — offline evaluation: final-response, single-step, trajectory | [`modules/04_datasets_and_experiments.ipynb`](modules/04_datasets_and_experiments.ipynb) | ~30 min |
-| **05** | **Online Evaluations** — LLM-as-judge run rules that score new traces automatically | [`modules/05_online_evals.ipynb`](modules/05_online_evals.ipynb) | ~25 min |
-| **06** | **Annotation Queues** — route low-scoring runs to human review | [`modules/06_annotation_queues.ipynb`](modules/06_annotation_queues.ipynb) | ~20 min |
-| **07** | **Deploy + Govern** — apply workspace-level gateway policies and ship the agent via LangSmith Deployments (optional) | [`modules/07_deploy_and_govern_optional.ipynb`](modules/07_deploy_and_govern_optional.ipynb) | ~25 min |
+| **01** | **Build a Deep Agent** — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills | [`modules/01_build_a_deep_agent.ipynb`](modules/01_build_a_deep_agent.ipynb) | ~45 min |
+| **02** | **Deploy + Govern** — apply workspace-level gateway policies and ship the agent via LangSmith Deployments | [`modules/02_deploy_and_govern.ipynb`](modules/02_deploy_and_govern.ipynb) | ~25 min |
+| **03** | **Tracing** — generate traces and query them with `list_runs` + filter DSL | [`modules/03_tracing.ipynb`](modules/03_tracing.ipynb) | ~20 min |
+| **04** | **Finding Failure Modes** — Chat, Insights Agent, and Engine | [`modules/04_finding_failure_modes.ipynb`](modules/04_finding_failure_modes.ipynb) | ~30 min |
+| **05** | **Datasets and Experiments** — offline evaluation: final-response, single-step, trajectory | [`modules/05_datasets_and_experiments.ipynb`](modules/05_datasets_and_experiments.ipynb) | ~30 min |
+| **06** | **Online Evaluations** — LLM-as-judge run rules that score new traces automatically | [`modules/06_online_evals.ipynb`](modules/06_online_evals.ipynb) | ~25 min |
+| **07** | **Annotation Queues** — route low-scoring runs to human review | [`modules/07_annotation_queues.ipynb`](modules/07_annotation_queues.ipynb) | ~20 min |
 
-Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 07) is ~2 hours.
+Modules are designed to run in order; the full sequence is ~3.5 hours. Modules 03–07 form the core observability + evaluation loop.
 
-**Optional modules** are tagged `_optional` in the filename:
-- **Module 01** introduces the `deepagents` framework from scratch. Skip if already familiar with custom tools, subagents, and prompts.
-- **Module 07** covers deployment via LangSmith. Skip if you don't have deployment permissions or are using LangSmith strictly for observability and evaluations.
-
-The remaining modules form the core observability + evaluation loop.
+- **Module 01** introduces the `deepagents` framework from scratch. Move quickly through it if you're already familiar with custom tools, subagents, and prompts.
+- **Module 02** covers deployment via LangSmith and requires LangSmith Deployments permissions to run the deploy step.
 
 ## Prerequisites
 
 - Python 3.11+
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) (recommended) or pip
 - A LangSmith account ([sign up](https://smith.langchain.com))
-- An API key from your model provider (Anthropic by default; OpenAI, Azure OpenAI, and AWS Bedrock are also supported — see *Switching Models* below)
-- A Tavily API key for the web search tool ([get one](https://tavily.com))
+- An API key from your model provider (OpenAI by default; Anthropic, Azure OpenAI, and AWS Bedrock are also supported — see *Switching Models* below)
+- No Tavily API key required — the agent's web search runs on built-in canned content in this POC
 
 ## Setup
 
@@ -51,11 +48,10 @@ Then open `modules/00_setup.ipynb` and run the cells in order to verify Python, 
 
 | Key | Required for | Where to get one |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Modules 01–07 (default model provider) | <https://console.anthropic.com> |
+| `OPENAI_API_KEY` | Modules 01–07 (default model provider) | <https://platform.openai.com/api-keys> |
 | `LANGSMITH_API_KEY` | All modules (tracing + evaluations) | <https://smith.langchain.com> |
-| `TAVILY_API_KEY` | Modules 01–06 (web search tool used by the agent) | <https://tavily.com> |
 
-Module 06 (Deploy) additionally requires a LangSmith **service key** (`lsv2_sk_...`), not a personal access token, for deployment permissions.
+Module 02 (Deploy) additionally requires a LangSmith **service key** (`lsv2_sk_...`), not a personal access token, for deployment permissions.
 
 ## Switching Models
 
@@ -64,11 +60,11 @@ All modules import `model` from `utils/models.py`. Change one line there to swap
 ```python
 # utils/models.py
 
-# Anthropic (default)
-model = init_chat_model("anthropic:claude-sonnet-4-6")
+# OpenAI (default)
+model = init_chat_model("openai:gpt-5.4-mini")
 
-# OpenAI
-# model = init_chat_model("openai:gpt-4.1-mini")
+# Anthropic
+# model = init_chat_model("anthropic:claude-sonnet-4-6")
 
 # Azure OpenAI
 # from langchain_openai import AzureChatOpenAI
@@ -81,9 +77,9 @@ model = init_chat_model("anthropic:claude-sonnet-4-6")
 
 Then set the matching API key environment variable in `.env`. See `.env.example` for the full set of supported provider variables.
 
-## Deploy + Govern (Module 07)
+## Deploy + Govern (Module 02)
 
-Module 07 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 02 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
 
 Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token. The gateway sections require `LANGSMITH_API_KEY_GATEWAY` (same value) and `WORKSPACE_ID` — see `.env.example`.
 
@@ -98,10 +94,10 @@ langsmith-guided-tour/
 ├── utils/
 │   ├── config.py                              (active agent + project name — single source of truth)
 │   ├── models.py                              (model initialization — swap providers here)
-│   ├── search.py                              (resilient Tavily wrapper with canned fallbacks)
+│   ├── search.py                              (web search wrapper — canned content, no API key required)
 │   └── langsmith_rules.py                     (helpers for run rules + annotation queues)
 ├── agents/
-│   ├── client_research_agent.py               (eval-safe agent imported by Modules 02–05 via utils.config)
+│   ├── client_research_agent.py               (eval-safe agent imported by Modules 03–06 via utils.config)
 │   └── deployable_agents/
 │       ├── client_research/                   (deployable variant — AGENTS.md, skills, CompositeBackend)
 │       │   ├── agent.py
@@ -118,13 +114,13 @@ langsmith-guided-tour/
 ├── images/                                    (diagrams + screenshots referenced by the notebooks)
 ├── modules/
 │   ├── 00_setup.ipynb
-│   ├── 01_build_a_deep_agent_optional.ipynb
-│   ├── 02_tracing.ipynb
-│   ├── 03_finding_failure_modes.ipynb
-│   ├── 04_datasets_and_experiments.ipynb
-│   ├── 05_online_evals.ipynb
-│   ├── 06_annotation_queues.ipynb
-│   └── 07_deploy_and_govern_optional.ipynb
+│   ├── 01_build_a_deep_agent.ipynb
+│   ├── 02_deploy_and_govern.ipynb
+│   ├── 03_tracing.ipynb
+│   ├── 04_finding_failure_modes.ipynb
+│   ├── 05_datasets_and_experiments.ipynb
+│   ├── 06_online_evals.ipynb
+│   └── 07_annotation_queues.ipynb
 └── skills/
     └── customize-poc/                         (Claude Code skill for adapting this repo to a new domain)
         ├── SKILL.md

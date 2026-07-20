@@ -30,7 +30,10 @@ from __future__ import annotations
 import time
 from typing import Optional
 
-from tavily import TavilyClient
+try:
+    from tavily import TavilyClient
+except ImportError:  # Tavily disabled for this POC; the package may be absent.
+    TavilyClient = None
 
 
 # --------------------------------------------------------------------------- #
@@ -173,6 +176,12 @@ def resilient_tavily_search(
         client: optional TavilyClient to use. If `None`, a lazily-initialized
             module-level client is used.
     """
+    # --- TAVILY DISABLED for this POC (team has no API key) ------------------
+    # Bypass the live search client and return topic-matched canned content, so
+    # every module runs without a TAVILY_API_KEY. Delete the next line to
+    # re-enable live Tavily search (see the retry loop below).
+    return _pick_fallback(query)
+
     global _default_client
     if client is None:
         if _default_client is None:
