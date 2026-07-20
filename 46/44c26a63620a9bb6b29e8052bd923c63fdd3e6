@@ -1,0 +1,40 @@
+modules/03_tracing.ipynb
+  s_39e62b9267d131::t_da58162b36e782 231
+  s_39e62b9267d131::t_554fdf6863a3e7 1-230,232-256
+modules/02_deploy_and_govern_optional.ipynb
+  s_39e62b9267d131::t_da58162b36e782 76,213,225,231
+  s_39e62b9267d131::t_554fdf6863a3e7 1-75,77-212,214-224,226-230,232-255
+modules/05_datasets_and_experiments.ipynb
+  s_39e62b9267d131::t_554fdf6863a3e7 1-11,13-17,19-370
+  s_39e62b9267d131::t_da58162b36e782 12,18
+modules/04_finding_failure_modes.ipynb
+  s_39e62b9267d131::t_554fdf6863a3e7 1-6,8-55,57-74,76-86,88-125,127-131,133-137,139-154
+  s_39e62b9267d131::t_da58162b36e782 7,56,75,87,126,132,138
+modules/06_online_evals.ipynb
+  s_39e62b9267d131::t_554fdf6863a3e7 1-6,8-223,225-254
+  s_39e62b9267d131::t_da58162b36e782 7,224
+modules/07_annotation_queues.ipynb
+  s_39e62b9267d131::t_da58162b36e782 7,74,80,95,102,108,182
+  s_39e62b9267d131::t_554fdf6863a3e7 1-6,8-73,75-79,81-94,96-101,103-107,109-181,183-206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "4644c26a63620a9bb6b29e8052bd923c63fdd3e6",
+  "prompts": {},
+  "humans": {
+    "h_7cae82992be157": {
+      "author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_39e62b9267d131": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "1a460427-6ead-498e-9fd3-1842a70faa11",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
