@@ -79,9 +79,23 @@ Then set the matching API key environment variable in `.env`. See `.env.example`
 
 ## Deploy + Govern (Module 02)
 
-Module 02 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 02 covers three things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`), then running that same agent as a self-managed standalone server. The deploy config is `langgraph.json` at the repo root. Three graphs are registered: `data_agent` (the primary deployable), plus `client_research` and `base_research_agent` as further examples.
 
 Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token. The gateway sections require `LANGSMITH_API_KEY_GATEWAY` (same value) and `WORKSPACE_ID` — see `.env.example`.
+
+### Standalone server (Part 3)
+
+Part 3 builds the agent into an OCI image and runs it against your own Postgres and Redis, with no LangSmith control plane. Requires Docker with Compose. `compose.standalone.yml` at the repo root declares the three services; `.dockerignore` keeps `.env` and other local state out of the image, since secrets are injected at runtime.
+
+```bash
+uv run langgraph build -t langsmith-poc-data-agent:local
+docker compose -f compose.standalone.yml up -d
+curl localhost:8123/ok             # -> {"ok":true}
+open http://localhost:8123/docs    # Swagger UI
+docker compose -f compose.standalone.yml down -v
+```
+
+The local run authenticates with `LANGSMITH_API_KEY`. A production standalone deployment additionally requires a LangSmith license key (`LANGGRAPH_CLOUD_LICENSE_KEY`), plus egress to `https://beacon.langchain.com` for license verification unless running air-gapped.
 
 ## Project Structure
 
@@ -91,6 +105,8 @@ langsmith-guided-tour/
 ├── pyproject.toml                             (shared dependencies)
 ├── .env.example
 ├── langgraph.json                             (registers deployable graphs)
+├── compose.standalone.yml                     (standalone Agent Server — Module 02 Part 3)
+├── .dockerignore                              (keeps .env and local state out of built images)
 ├── utils/
 │   ├── config.py                              (active agent + project name — single source of truth)
 │   ├── models.py                              (model initialization — swap providers here)

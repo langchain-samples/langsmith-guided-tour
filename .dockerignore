@@ -1,0 +1,43 @@
+# The generated Dockerfile does `ADD . /deps/<project>`, so anything not excluded
+# here lands in an image layer. Secrets are injected at runtime instead — see
+# compose.standalone.yml.
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+*.crt
+credentials.json
+
+# Virtualenvs and VCS metadata
+.venv/
+venv/
+env/
+.git/
+.gitignore
+
+# Python caches
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Workshop assets — not needed at runtime
+modules/
+images/
+slides/
+planning/
+.ipynb_checkpoints/
+
+# Local langgraph dev state
+.langgraph_api/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.cursor/

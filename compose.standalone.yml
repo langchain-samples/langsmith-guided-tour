@@ -1,0 +1,57 @@
+# Standalone Agent Server — local demo (Module 02, Part 3).
+#
+# Runs the image from `langgraph build` against a Postgres and Redis you control,
+# with no LangSmith control plane. Secrets come from .env at runtime, never from
+# an image layer.
+#
+# The Postgres credentials below are throwaway defaults for an ephemeral local
+# container. A real deployment supplies them from your secret manager and also
+# sets LANGGRAPH_CLOUD_LICENSE_KEY (a LangSmith license key).
+
+name: langsmith-poc-standalone
+
+volumes:
+  postgres-data:
+
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-postgres}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER:-postgres}
+      start_period: 10s
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+  redis:
+    image: redis:7
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+  agent:
+    image: ${IMAGE_NAME:-langsmith-poc-data-agent:local}
+    # Host 8123 -> container 8000. The Agent Server listens on 8000.
+    ports:
+      - "8123:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    # Model provider keys, LANGSMITH_API_KEY, and (if Part 1 is active)
+    # LANGSMITH_API_KEY_GATEWAY all arrive here at runtime.
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATABASE_URI: postgres://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-postgres}?sslmode=disable
+      REDIS_URI: redis://redis:6379
