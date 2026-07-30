@@ -1,0 +1,42 @@
+pyproject.toml
+  s_574ed7b7ab4f05::t_5fd20fece0c9c2 7-9
+README.md
+  s_574ed7b7ab4f05::t_271fd2811013a8 82,86-97
+  s_574ed7b7ab4f05::t_76fbac7f0d8f4a 108-109
+  s_574ed7b7ab4f05::t_9a6629f89054cd 98
+  s_574ed7b7ab4f05::t_dc703226e4716c 99
+compose.standalone.yml
+  s_574ed7b7ab4f05::t_1cb052d288de8a 1-8,10-57
+  s_574ed7b7ab4f05::t_bcb176a5e97f18 9
+.dockerignore
+  s_574ed7b7ab4f05::t_6d713a3f446634 1-43
+utils/models.py
+  s_574ed7b7ab4f05::t_320682fd31fc54 20
+  s_574ed7b7ab4f05::t_5a2df17561c4a3 6-8
+  s_574ed7b7ab4f05::t_f1c9733436546f 17
+uv.lock
+  s_574ed7b7ab4f05::t_d8c70086c8b2a9 2206
+modules/02_deploy_and_govern.ipynb
+  s_574ed7b7ab4f05::t_f50d98a3ba8d08 7,209-264,269,287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "beab9995f8d93513278efa9e4bfe1c9571623c5d",
+  "prompts": {},
+  "humans": {
+    "h_7cae82992be157": {
+      "author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_574ed7b7ab4f05": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "13472350-dd3e-4d7f-9f23-44ae5fad3f7e",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
