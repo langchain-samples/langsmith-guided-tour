@@ -1,0 +1,4 @@
+{
+  "dependencies": ["deepagents", "langchain-openai"],
+  "graphs": { "deep_agent": "./agent.py:make_graph" }
+}

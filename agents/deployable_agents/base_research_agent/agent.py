@@ -44,12 +44,15 @@ Limit to 3 search calls.""",
 }
 
 
-def backend_factory(rt):
-    """FilesystemBackend for disk access, /memories/ routed to StoreBackend."""
-    return CompositeBackend(
-        default=FilesystemBackend(root_dir=AGENT_DIR, virtual_mode=True),
-        routes={"/memories/": StoreBackend()},
-    )
+# An initialized instance, not a factory -- deepagents 0.7 removed backend
+# factories. FilesystemBackend for disk access, /memories/ to StoreBackend.
+backend = CompositeBackend(
+    default=FilesystemBackend(root_dir=AGENT_DIR, virtual_mode=True),
+    routes={
+        # namespace is required as of deepagents 0.7; accepted by 0.6 too.
+        "/memories/": StoreBackend(namespace=lambda rt: ("memories", "shared")),
+    },
+)
 
 
 agent = create_deep_agent(
@@ -59,6 +62,6 @@ agent = create_deep_agent(
     memory=["./AGENTS.md"],
     skills=["./skills/"],
     subagents=[research_subagent],
-    backend=backend_factory,
+    backend=backend,
     interrupt_on={"write_file": True, "edit_file": True},
 )

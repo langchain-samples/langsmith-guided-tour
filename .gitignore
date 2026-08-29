@@ -40,9 +40,14 @@ Thumbs.db
 .cursor/
 *.swp
 *.swo
+.claude/
 
 # Local langgraph dev output
 .langgraph_api/
+
+# Harbor (Module 3, Part B) — local job output + scratch workspace
+jobs/
+.dev-workspace/
 
 # Internal planning docs (not shipped with the tour)
 planning/

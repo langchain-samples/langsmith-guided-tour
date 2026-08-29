@@ -1,0 +1,1 @@
+Meridian Semiconductor reported adjusted EPS of **$1.79**, calculated by adding back the $340M pre-tax litigation charge net of the 21% tax rate to $412M of GAAP net income, then dividing by 380M diluted shares. This beat the street's $1.71 consensus by $0.08.
