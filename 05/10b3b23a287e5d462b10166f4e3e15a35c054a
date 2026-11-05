@@ -1,0 +1,21 @@
+agents/client_research_agent.py
+  s_3d1bdb9585c62f::t_e017fd71531a18 1,6,10,13-15,22,24,31,33,40-58,62-68,86,88,90-91,94,102-115,120,122,125,129-131
+tests/test_client_research_agent.py
+  s_3d1bdb9585c62f::t_f1fcb5795c896d 1-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0510b3b23a287e5d462b10166f4e3e15a35c054a",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
