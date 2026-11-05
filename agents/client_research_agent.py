@@ -87,7 +87,7 @@ def get_client_profile(client_id: str) -> str:
     """
     client = CLIENTS.get(client_id.strip().upper())
     if client is None:
-        raise ValueError(f"No client found with ID '{client_id}'. Client IDs look like 'CL-0000'.")
+        raise ValueError(f"No client found with ID '{client_id}'.")
     holdings = "\n".join(f"  - {ticker}: {weight:.1%}" for ticker, weight in client["top_holdings"])
     return (
         f"**{client['name']}** ({client['type']})\n"

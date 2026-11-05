@@ -36,7 +36,8 @@ def test_miss_message_states_format_only():
     with pytest.raises(ValueError) as exc_info:
         get_client_profile.invoke({"client_id": "acme-pension"})
     message = str(exc_info.value)
-    assert "CL-0000" in message
+    assert message.startswith("No client found")
+    assert "CL-" not in message
     for client_id, client in CLIENTS.items():
         assert client_id not in message
         assert client["name"] not in message
