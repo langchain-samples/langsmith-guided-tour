@@ -62,3 +62,20 @@ def test_langgraph_config_uses_the_deploy_env_file():
 def test_agents_md_has_no_todo_tool():
     for path in (REPO_ROOT / "agents/deployable_agents").glob("*/AGENTS.md"):
         assert "write_todos" not in path.read_text(), path
+
+
+def test_managed_agent_name_matches_config():
+    tree = ast.parse((MANAGED_DIR / "agent.py").read_text())
+    names = [
+        kw.value.value
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Call) and getattr(node.func, "id", "") == "define_deep_agent"
+        for kw in node.keywords
+        if kw.arg == "name"
+    ]
+    assert names == [MANAGED_AGENT_NAME]
+
+
+def test_managed_agent_has_no_client_lookup():
+    sources = [p.read_text() for p in MANAGED_DIR.rglob("*") if p.suffix in {".py", ".md"}]
+    assert sources and not any("get_client_profile" in text for text in sources)

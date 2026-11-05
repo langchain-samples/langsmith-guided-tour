@@ -1,0 +1,10 @@
+[project]
+name = "client-research-managed"
+version = "0.1.0"
+description = "Research half of the client-research agent as a Managed Deep Agent."
+requires-python = ">=3.11"
+dependencies = [
+    "langchain-openai>=1.7.4",
+    "managed-deepagents==0.5.2",
+    "tavily-python>=0.7.21",
+]
