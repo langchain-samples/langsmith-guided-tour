@@ -2,6 +2,7 @@
 .env
 .env.local
 .env.*.local
+.env.deploy
 
 # Python
 __pycache__/
@@ -43,6 +44,7 @@ Thumbs.db
 
 # Local langgraph dev output
 .langgraph_api/
+.mda/
 
 # Internal planning docs (not shipped with the tour)
 planning/
