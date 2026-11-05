@@ -1,0 +1,179 @@
+[
+  {
+    "id": "lookup-acme-holdings",
+    "category": "client_lookup",
+    "turns": [
+      "What are Acme Pension Fund's top holdings?"
+    ]
+  },
+  {
+    "id": "research-msft-ai",
+    "category": "research",
+    "turns": [
+      "What's the latest news on Microsoft's AI spending?"
+    ]
+  },
+  {
+    "id": "lookup-smith-risk",
+    "category": "client_lookup",
+    "turns": [
+      "Pull up the risk profile for the Smith Family Office."
+    ]
+  },
+  {
+    "id": "oos-flight",
+    "category": "out_of_scope",
+    "turns": [
+      "Book me a flight to Chicago next Tuesday."
+    ]
+  },
+  {
+    "id": "lookup-techcorp-meeting",
+    "category": "client_lookup",
+    "turns": [
+      "When did we last meet with TechCorp Treasury?"
+    ]
+  },
+  {
+    "id": "research-jpm-earnings",
+    "category": "research",
+    "turns": [
+      "Summarize JPMorgan's most recent quarterly earnings."
+    ]
+  },
+  {
+    "id": "lookup-acme-prep",
+    "category": "client_lookup",
+    "turns": [
+      "Prep me for my Acme Pension meeting.",
+      "What about their risk profile?",
+      "Then research their largest holding."
+    ]
+  },
+  {
+    "id": "lookup-by-id-acme",
+    "category": "client_lookup_by_id",
+    "turns": [
+      "Look up client CL-0042 and list their top holdings."
+    ]
+  },
+  {
+    "id": "lookup-harbor-aum",
+    "category": "client_lookup",
+    "turns": [
+      "How much does Harbor University Endowment have under management with us?"
+    ]
+  },
+  {
+    "id": "research-nvda-googl",
+    "category": "research",
+    "turns": [
+      "What's driving NVIDIA's stock this quarter?",
+      "How does that compare with Alphabet?"
+    ]
+  },
+  {
+    "id": "lookup-delgado-brief",
+    "category": "client_lookup",
+    "turns": [
+      "I'm meeting the Delgado Family Trust tomorrow. Give me a quick profile."
+    ]
+  },
+  {
+    "id": "oos-taxes",
+    "category": "out_of_scope",
+    "turns": [
+      "Can you do my personal tax return?"
+    ]
+  },
+  {
+    "id": "lookup-techcorp-allocation",
+    "category": "client_lookup",
+    "turns": [
+      "What does TechCorp Treasury hold?",
+      "Is that allocation consistent with their risk profile?"
+    ]
+  },
+  {
+    "id": "research-treasury-yields",
+    "category": "research",
+    "turns": [
+      "How are short-term Treasury yields moving this month?"
+    ]
+  },
+  {
+    "id": "lookup-acme-slug",
+    "category": "client_lookup",
+    "turns": [
+      "Look up client acme-pension and summarize their portfolio."
+    ]
+  },
+  {
+    "id": "lookup-by-id-techcorp",
+    "category": "client_lookup_by_id",
+    "turns": [
+      "What's the risk profile for client CL-0263?"
+    ]
+  },
+  {
+    "id": "lookup-delgado-news",
+    "category": "client_lookup",
+    "turns": [
+      "Give me the Delgado Family Trust's top holdings.",
+      "Any recent news on the biggest one?"
+    ]
+  },
+  {
+    "id": "research-berkshire-letter",
+    "category": "research",
+    "turns": [
+      "Research Berkshire Hathaway's latest annual letter.",
+      "Pull out anything relevant to a family office client.",
+      "Summarize it in three bullets."
+    ]
+  },
+  {
+    "id": "lookup-smith-nvda",
+    "category": "client_lookup",
+    "turns": [
+      "How exposed is the Smith family office to NVDA?"
+    ]
+  },
+  {
+    "id": "oos-poem",
+    "category": "out_of_scope",
+    "turns": [
+      "Write a poem about the ocean."
+    ]
+  },
+  {
+    "id": "lookup-smith-summary",
+    "category": "client_lookup",
+    "turns": [
+      "Summarize the Smith Family Office account.",
+      "What changed since our last meeting?",
+      "Draft three talking points."
+    ]
+  },
+  {
+    "id": "research-xom-dividend",
+    "category": "research",
+    "turns": [
+      "What are analysts saying about Exxon's dividend?"
+    ]
+  },
+  {
+    "id": "lookup-harbor-type",
+    "category": "client_lookup",
+    "turns": [
+      "What kind of client is the Harbor University endowment, and what's their risk profile?"
+    ]
+  },
+  {
+    "id": "research-agg-overview",
+    "category": "research",
+    "turns": [
+      "Give me a two-paragraph overview of the AGG bond ETF."
+    ]
+  }
+]
