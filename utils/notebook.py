@@ -8,6 +8,16 @@ def trace_link(url: str, label: str = "View in LangSmith") -> None:
     print(f"🔗 {label}: {url}")
 
 
+def threads_url(project_url: str) -> str:
+    """Return the Tracing page link with the Threads tab open."""
+    return f"{project_url}?runview=threads"
+
+
+def thread_url(project_url: str, thread_id: str) -> str:
+    """Return a link that opens one thread in the Trajectory view."""
+    return f"{threads_url(project_url)}&peekedConversationId={thread_id}&conversationTab=messages"
+
+
 def print_files(files: dict) -> None:
     """Print each file in a deep agent's `files` state, truncated to MAX_FILE_LINES lines."""
     for path, file_data in files.items():
