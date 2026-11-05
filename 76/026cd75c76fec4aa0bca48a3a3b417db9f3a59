@@ -1,0 +1,33 @@
+agents/managed/client_research/.gitignore
+  s_3d1bdb9585c62f::t_a6c05fa3d0dd1c 1-20
+agents/managed/client_research/agent.py
+  s_3d1bdb9585c62f::t_d5ea68bb4569ae 1-23
+agents/managed/client_research/instructions.md
+  s_3d1bdb9585c62f::t_8ad1fcaeced857 1-15
+agents/managed/client_research/pyproject.toml
+  s_3d1bdb9585c62f::t_3c60389abf3457 1-10
+agents/managed/client_research/skills/client-brief/SKILL.md
+  s_3d1bdb9585c62f::t_538a1f438632f3 1-26
+agents/managed/client_research/skills/portfolio-update/SKILL.md
+  s_3d1bdb9585c62f::t_179b95613030a0 1-25
+agents/managed/client_research/tools/search.py
+  s_3d1bdb9585c62f::t_f91917818b8388 1-15
+tests/test_deployable_agents.py
+  s_3d1bdb9585c62f::t_f6b5a54f93141d 65-81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76026cd75c76fec4aa0bca48a3a3b417db9f3a59",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
