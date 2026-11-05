@@ -17,6 +17,10 @@ EXPECTED_HEADINGS = [
     "## 6. Middleware",
     "## 7. Human approval",
     "## 8. AGENTS.md and skills",
+    "## 9. Interpreters (beta)",
+    "## 10. Dynamic subagents (beta)",
+    "## 11. The complete agent",
+    "## Recap",
 ]
 BANNED_PATTERNS = [
     r"\bMemorySaver\b",
@@ -104,3 +108,20 @@ def test_images_exist_or_are_placeholders():
     for cell in load_cells():
         for name in re.findall(r"\.\./images/([^\"')]+)", source(cell)):
             assert (REPO_ROOT / "images" / name).exists() or name.startswith("TODO-01-"), name
+
+
+def test_beta_sections_are_gated():
+    sections = numbered_sections()
+    for heading in ("## 9. Interpreters (beta)", "## 10. Dynamic subagents (beta)"):
+        intro = source(sections[heading][0])
+        assert "> **Requires:**" in intro and "**Without it:**" in intro, heading
+
+
+def test_complete_agent_returns_tool_errors():
+    complete = "".join(source(cell) for cell in numbered_sections()["## 11. The complete agent"])
+    assert "client_lookup_errors" in complete and "get_client_profile" in complete
+
+
+def test_ends_with_recap():
+    last = source(load_cells()[-1])
+    assert last.startswith("## Recap") and "**Next:** Module 2" in last and "**Docs:**" in last
