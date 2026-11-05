@@ -1,25 +1,6 @@
 """REST helpers for Insights reports and Red Teaming runs, which the SDK doesn't fully cover."""
 
 from langsmith import Client
-from langsmith.schemas import InsightsReport
-
-
-def start_insights_report(client: Client, project_id: str, name: str, question: str) -> InsightsReport:
-    """Start an Insights report over a project's last 7 days of root runs."""
-    config = {
-        "name": name,
-        "user_context": {"What would you like to learn about your agent?": question},
-        "last_n_hours": 7 * 24,
-        # Insights calls OpenAI with the workspace secret OPENAI_API_KEY
-        "model": "openai",
-    }
-    response = client.request_with_retries("POST", f"/sessions/{project_id}/insights", json=config)
-    return InsightsReport(
-        **response.json(),
-        project_id=project_id,
-        tenant_id=client._get_tenant_id(),
-        host_url=client._host_url,
-    )
 
 
 def latest_insights_job(client: Client, project_id: str) -> dict | None:
