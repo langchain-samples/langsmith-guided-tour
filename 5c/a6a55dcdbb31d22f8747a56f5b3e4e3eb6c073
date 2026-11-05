@@ -1,0 +1,19 @@
+modules/07_deploy_optional.ipynb
+  s_3d1bdb9585c62f::t_c5feda727ce65a 11,72,87,91,99-109,128,130,153,163,167-174,209,227,229-246,249-250,266,279,297-314,324,331-338,346,350-369,395
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5ca6a55dcdbb31d22f8747a56f5b3e4e3eb6c073",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
