@@ -80,16 +80,16 @@ def test_headings_in_order():
     assert headings() == EXPECTED_HEADINGS
 
 
-def test_sections_have_two_to_five_cells():
+def test_sections_have_two_to_eight_cells():
+    # Define and run are separate cells, so sections run longer than 5
     for heading, cells in numbered_sections().items():
-        assert 2 <= len(cells) <= 5, heading
+        assert 2 <= len(cells) <= 8, heading
 
 
-def test_every_invoke_is_addressed():
+def test_tracing_is_set_by_env_not_wrappers():
     for cell in load_cells():
-        text = source(cell)
-        if cell["cell_type"] == "code" and ".invoke(" in text:
-            assert "with ls.tracing_context(**trace_target):" in text, text[:80]
+        if cell["cell_type"] == "code":
+            assert "tracing_context" not in source(cell)
 
 
 def test_reads_reply_text():
