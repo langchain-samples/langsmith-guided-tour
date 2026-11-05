@@ -1,0 +1,25 @@
+tests/test_notebook.py
+  s_3d1bdb9585c62f::t_a014062fa6577c 1-27
+tests/test_workspace.py
+  s_3d1bdb9585c62f::t_e5035cd8388283 1-64
+utils/notebook.py
+  s_3d1bdb9585c62f::t_6e66a57f147225 1-20
+utils/workspace.py
+  s_3d1bdb9585c62f::t_e13e38e18fdf68 1-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e667f03a94825a60fb554833b7e16e2cb314fb58",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
