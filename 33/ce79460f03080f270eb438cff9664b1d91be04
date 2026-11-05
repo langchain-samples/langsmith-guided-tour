@@ -1,0 +1,19 @@
+modules/05_offline_evals.ipynb
+  s_3d1bdb9585c62f::t_f7a6882d9a4601 11,60-62,84,94,130-132,173-175,177,201,208,213-230,232-242,248,262,266-283,287,295-311,320-322,345-352,365,372,385,406,408-410,433-450,461-469,512,522,566-573,577,584-601
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "33ce79460f03080f270eb438cff9664b1d91be04",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
