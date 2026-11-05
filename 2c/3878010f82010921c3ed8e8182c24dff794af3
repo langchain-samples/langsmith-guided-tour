@@ -1,0 +1,29 @@
+tests/test_golden_seed.py
+  s_3d1bdb9585c62f::t_d1ef0d8952d4bb 1-41
+data/golden_seed.json
+  s_108249f937a6b2::t_b8782a87566251 1-902
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2c3878010f82010921c3ed8e8182c24dff794af3",
+  "prompts": {},
+  "sessions": {
+    "s_108249f937a6b2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "agent-ab815735b5427dc84",
+        "model": "unknown"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    },
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
