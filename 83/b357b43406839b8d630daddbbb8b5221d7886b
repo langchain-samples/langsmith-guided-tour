@@ -1,0 +1,23 @@
+data/seed_conversations.json
+  s_3d1bdb9585c62f::t_4434280f048410 1-179
+tests/test_traffic.py
+  s_3d1bdb9585c62f::t_18691aa96c607c 1-41
+utils/traffic.py
+  s_3d1bdb9585c62f::t_8236912cf231de 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83b357b43406839b8d630daddbbb8b5221d7886b",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
