@@ -1,0 +1,24 @@
+utils/engine_reports.py
+  s_3d1bdb9585c62f::t_fea38d45a1a39a 1-41
+modules/03_engine.ipynb
+  s_3d1bdb9585c62f::t_1338ffdc82b005 516-517
+  s_3d1bdb9585c62f::t_fc2c4bb9b777b5 43,49,60,124-126,134,382,384,392,396-445,474-500
+utils/notebook.py
+  s_3d1bdb9585c62f::t_fc2c4bb9b777b5 21-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "1f123e7a5f2f10d5e8cefae843655b88df9f4afe",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
