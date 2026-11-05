@@ -1,0 +1,19 @@
+modules/02_tracing.ipynb
+  s_3d1bdb9585c62f::t_a0d20dbdf44145 9,11,18-22,34-38,41,43-46,49-52,54-55,62,64,73,75-76,83,85,92,94,96,98-105,114-117,119-120,127,134,136,145-155,157,161,164,171,173-175,182,184,190,195,199-200
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "efca8b7cd9a59f3165c936b668a7b98deffba98b",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
