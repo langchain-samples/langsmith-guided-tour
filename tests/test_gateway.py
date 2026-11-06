@@ -293,3 +293,59 @@ def test_notebook_spend_policy_matches_api_shape():
     config = policy["config"]
     assert config["window"] in {"hourly", "daily", "weekly", "monthly"}
     assert config["limit_usd"] > 0
+
+
+def test_find_user_id_matches_email(mock_http):
+    set_handler, requests = mock_http
+    set_handler(lambda request: httpx.Response(200, json=[
+        {"email": "someone@example.com", "ls_user_id": "u-other"},
+        {"email": "Me@Example.com", "ls_user_id": "u-me"},
+    ]))
+    assert gateway.find_user_id("me@example.com") == "u-me"
+    assert requests[0].url.path == gateway.MEMBERS_PATH
+    assert requests[0].headers["X-Api-Key"] == "lsv2_pt_ws"
+
+
+def test_builtin_tool_action():
+    assert gateway.builtin_tool_action("parallel", "parallel_web_search") == "langsmith_parallel_parallel_web_search"
+
+
+def test_create_tool_policy_posts_forbid_for_one_user(mock_http):
+    set_handler, requests = mock_http
+    set_handler(lambda request: httpx.Response(201, json={"id": "p1", "name": "tour-block-search"}))
+    policy = gateway.create_tool_policy("tour-block-search", "u-me", ["langsmith_parallel_parallel_web_search"])
+
+    body = json.loads(requests[0].content)
+    assert policy["id"] == "p1"
+    assert requests[0].url.path == gateway.TOOL_POLICIES_PATH
+    assert requests[0].headers["X-Tenant-Id"] == "ws-local"
+    assert body["effect"] == "FORBID"
+    assert body["scope"] == {"principals": [{"type": "User", "id": "u-me"}], "actions": ["langsmith_parallel_parallel_web_search"]}
+
+
+def test_create_tool_policy_reuses_existing_name(mock_http):
+    set_handler, _ = mock_http
+
+    def handler(request):
+        if request.method == "POST":
+            return httpx.Response(409, json={"detail": "name taken"})
+        return httpx.Response(200, json={"items": [{"id": "p1", "name": "tour-block-search"}], "next_cursor": None})
+
+    set_handler(handler)
+    assert gateway.create_tool_policy("tour-block-search", "u-me", ["x"])["id"] == "p1"
+
+
+def test_create_tool_policy_returns_none_on_403(mock_http, capsys):
+    set_handler, _ = mock_http
+    set_handler(lambda request: httpx.Response(403, json={"detail": "forbidden"}))
+    assert gateway.create_tool_policy("tour-block-search", "u-me", ["x"]) is None
+    assert "organization:access-control:manage" in capsys.readouterr().out
+
+
+def test_delete_tool_policy_accepts_404(mock_http):
+    set_handler, requests = mock_http
+    set_handler(lambda request: httpx.Response(404))
+    gateway.delete_tool_policy("p1")
+    assert requests[0].method == "DELETE"
+    assert requests[0].url.path == f"{gateway.TOOL_POLICIES_PATH}/p1"
+

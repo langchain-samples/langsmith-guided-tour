@@ -1,4 +1,4 @@
-"""REST plumbing for Module 6: LLM Gateway policies and Tool Gateway kits."""
+"""REST plumbing for Module 6: LLM Gateway policies, Tool Gateway kits and tool policies."""
 
 import os
 
@@ -9,6 +9,8 @@ from langsmith.run_helpers import get_current_run_tree
 API_URL = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com").rstrip("/")
 POLICIES_PATH = "/v1/platform/gateway-policies"
 KITS_PATH = "/v1/managed-tools/kits"
+TOOL_POLICIES_PATH = "/v1/agent-policies"
+MEMBERS_PATH = "/api/v1/orgs/current/members/active"
 MCP_PROTOCOL_VERSION = "2025-06-18"
 # langchain_core.utils._gateway.GATEWAY_METADATA_RESPONSE_KEY (private)
 GATEWAY_METADATA_KEY = "lc_gateway_metadata"
@@ -188,3 +190,53 @@ class GatewayInfoCollector(BaseCallbackHandler):
                 info = (generation.generation_info or {}).get(GATEWAY_METADATA_KEY)
                 if info is not None:
                     self.infos.append(info)
+
+
+def find_user_id(email: str) -> str | None:
+    """Return the LangSmith user ID of the org member with this login email, or None."""
+    with _tools_http() as http:
+        response = http.get(MEMBERS_PATH, params={"q": email, "limit": 10})
+    response.raise_for_status()
+    for member in response.json():
+        if member["email"].lower() == email.lower():
+            return member["ls_user_id"]
+    return None
+
+
+def builtin_tool_action(server_key: str, tool_name: str) -> str:
+    """Return the policy action name of a LangSmith built-in tool, e.g. langsmith_parallel_parallel_web_search."""
+    return f"langsmith_{server_key}_{tool_name}"
+
+
+def _find_tool_policy(http: httpx.Client, name: str) -> dict | None:
+    response = http.get(TOOL_POLICIES_PATH, params={"page_size": 100})
+    response.raise_for_status()
+    return next((policy for policy in response.json()["items"] if policy["name"] == name), None)
+
+
+def create_tool_policy(name: str, user_id: str, actions: list[str]) -> dict | None:
+    """Create a policy that forbids one user these tool actions; None without the admin permission."""
+    policy = {
+        "name": name,
+        "description": "Module 6: blocks one user's web search through the Tool Gateway",
+        "effect": "FORBID",  # the only effect; tools are allowed unless a policy forbids them
+        "scope": {"principals": [{"type": "User", "id": user_id}], "actions": actions},
+    }
+    with _tools_http() as http:
+        response = http.post(TOOL_POLICIES_PATH, json=policy)
+        if response.status_code == 409:  # the name is taken: reuse it
+            return _find_tool_policy(http, name)
+    if response.status_code == 403:
+        print(f"Not created: {name} needs organization:access-control:manage ({_error_detail(response)})")
+        return None
+    response.raise_for_status()
+    return response.json()
+
+
+def delete_tool_policy(policy_id: str) -> None:
+    """Delete a tool policy; a policy that is already gone is fine."""
+    with _tools_http() as http:
+        response = http.delete(f"{TOOL_POLICIES_PATH}/{policy_id}")
+    if response.status_code == 404:
+        return
+    response.raise_for_status()
