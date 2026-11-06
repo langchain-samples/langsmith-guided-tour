@@ -3,6 +3,7 @@
 from datetime import datetime
 
 from deepagents import create_deep_agent
+from deepagents.middleware.subagents import GENERAL_PURPOSE_SUBAGENT
 from langchain.agents.middleware import ToolCallRequest, ToolErrorMiddleware
 from langchain_core.tools import tool
 from langgraph.checkpoint.memory import MemorySaver
@@ -124,11 +125,14 @@ def build_client_research_agent(model=None, search_tool=None, extra_tools=()):
         ),
         "tools": [search_tool],
     }
+    tools = [search_tool, get_client_profile, *extra_tools]
+    # The default general-purpose subagent doesn't inherit main-agent middleware, so lookup errors would crash it.
+    general_purpose_subagent = {**GENERAL_PURPOSE_SUBAGENT, "tools": tools, "middleware": [client_lookup_errors]}
     return create_deep_agent(
         model=model,
-        tools=[search_tool, get_client_profile, *extra_tools],
+        tools=tools,
         system_prompt=SYSTEM_PROMPT,
         middleware=[client_lookup_errors],
-        subagents=[research_subagent],
+        subagents=[research_subagent, general_purpose_subagent],
         checkpointer=MemorySaver(),
     )

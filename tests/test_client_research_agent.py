@@ -59,6 +59,21 @@ def test_slug_lookup_returns_error_and_agent_continues():
     assert result["messages"][-1].content == "I couldn't find that client."
 
 
+def test_slug_lookup_inside_general_purpose_subagent_does_not_crash():
+    script = iter([
+        AIMessage(content="", tool_calls=[{"name": "task", "args": {"subagent_type": "general-purpose", "description": "Look up Acme Pension Fund."}, "id": "call-1"}]),
+        AIMessage(content="", tool_calls=[{"name": "get_client_profile", "args": {"client_id": "acme-pension"}, "id": "call-2"}]),
+        AIMessage(content="Subagent: no such client."),
+        AIMessage(content="I couldn't find that client."),
+    ])
+    agent = build_client_research_agent(model=ScriptedModel(messages=script), search_tool=fake_search)
+    result = agent.invoke(
+        {"messages": [{"role": "user", "content": "Profile for Acme Pension Fund?"}]},
+        config={"configurable": {"thread_id": "t-gp"}},
+    )
+    assert result["messages"][-1].content == "I couldn't find that client."
+
+
 def test_builder_adds_extra_tools():
     @tool
     def find_client_id(name: str) -> str:
