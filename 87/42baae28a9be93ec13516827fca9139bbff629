@@ -1,0 +1,24 @@
+utils/gateway.py
+  s_3d1bdb9585c62f::t_f9dc7900e6f035 1,12-13,193-242
+modules/06_govern_optional.ipynb
+  s_3d1bdb9585c62f::t_d873e207e9de20 20-27,76,136,344,451,455,459-488,494-502,507-509,551,560,568-571,592
+  s_3d1bdb9585c62f::t_0335a3a3fe66c6 453,489-493,503-506
+tests/test_gateway.py
+  s_3d1bdb9585c62f::t_f9dc7900e6f035 296-351
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8742baae28a9be93ec13516827fca9139bbff629",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
