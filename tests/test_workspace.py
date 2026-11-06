@@ -1,4 +1,6 @@
-from utils.workspace import ensure_model_config, ensure_workspace_secret
+from types import SimpleNamespace
+
+from utils.workspace import ensure_model_config, ensure_workspace_secret, tag_to_agent
 
 
 class FakeResponse:
@@ -17,6 +19,7 @@ class FakeClient:
         self.secrets = list(secrets)
         self.configs = list(configs)
         self.calls = []
+        self.agents = SimpleNamespace(retrieve=lambda agent_id: SimpleNamespace(tag_value_id=f"tag-{agent_id}"))
 
     def request_with_retries(self, method, path, **kwargs):
         self.calls.append((method, path, kwargs.get("json")))
@@ -62,3 +65,12 @@ def test_ensure_model_config_is_idempotent():
     client = FakeClient(configs=[{"id": "cfg-1", "name": "client-research-model"}])
     assert ensure_model_config(client, "client-research-model", SPEC, "GATEWAY_MODEL_API_KEY") == "already set"
     assert len(client.calls) == 1
+
+
+def test_tag_to_agent_posts_the_agents_tag():
+    client = FakeClient()
+    tag_to_agent(client, "client-research-agent", "dataset", "ds-1")
+    assert client.calls == [
+        ("POST", "/workspaces/current/taggings",
+         {"tag_value_id": "tag-client-research-agent", "resource_type": "dataset", "resource_id": "ds-1"}),
+    ]
