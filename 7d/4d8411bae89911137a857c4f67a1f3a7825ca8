@@ -1,0 +1,21 @@
+agents/managed/client_research/pyproject.toml
+  s_3d1bdb9585c62f::t_f5d2b7dac48237 8
+modules/07_deploy_optional.ipynb
+  s_3d1bdb9585c62f::t_ec98c73f52b161 281,305,316-317,348,409
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "7d4d8411bae89911137a857c4f67a1f3a7825ca8",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
