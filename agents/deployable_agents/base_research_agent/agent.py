@@ -16,7 +16,7 @@ from deepagents import create_deep_agent
 from deepagents.backends import CompositeBackend, FilesystemBackend, StoreBackend
 from langchain_core.tools import tool
 
-from utils.models import model
+from utils.models import make_model
 from utils.search import resilient_tavily_search
 
 AGENT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -44,21 +44,18 @@ Limit to 3 search calls.""",
 }
 
 
-def backend_factory(rt):
-    """FilesystemBackend for disk access, /memories/ routed to StoreBackend."""
-    return CompositeBackend(
-        default=FilesystemBackend(root_dir=AGENT_DIR, virtual_mode=True),
-        routes={"/memories/": StoreBackend()},
-    )
-
+backend = CompositeBackend(
+    default=FilesystemBackend(root_dir=AGENT_DIR),
+    routes={"/memories/": StoreBackend(namespace=lambda rt: ("base-research", "memories"))},
+)
 
 agent = create_deep_agent(
-    model=model,
+    model=make_model(),
     tools=[tavily_search],
     system_prompt="You are an expert research assistant.",
-    memory=["./AGENTS.md"],
-    skills=["./skills/"],
+    memory=["/AGENTS.md"],
+    skills=["/skills/"],
     subagents=[research_subagent],
-    backend=backend_factory,
+    backend=backend,
     interrupt_on={"write_file": True, "edit_file": True},
 )
