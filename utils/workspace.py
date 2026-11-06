@@ -5,6 +5,7 @@ from typing import Literal
 from langsmith.utils import raise_for_status_with_text
 
 EnsureStatus = Literal["created", "already set"]
+AgentResourceType = Literal["dataset", "queue"]
 
 MODEL_CONFIG_AVAILABILITY = {
     "available_in_playground": True,
@@ -48,3 +49,12 @@ def ensure_model_config(client, name: str, model_spec: dict, secret_name: str) -
     response = client.request_with_retries("PATCH", f"/playground-settings/{config_id}", json=MODEL_CONFIG_AVAILABILITY)
     raise_for_status_with_text(response)
     return "created"
+
+
+def tag_to_agent(client, agent_id: str, resource_type: AgentResourceType, resource_id) -> None:
+    """Show a dataset or queue under the agent in the UI; rerunning is a no-op."""
+    # The UI tags what you create inside an agent's view; the SDK doesn't, so code-created resources need this.
+    tag_value_id = client.agents.retrieve(agent_id).tag_value_id
+    body = {"tag_value_id": tag_value_id, "resource_type": resource_type, "resource_id": str(resource_id)}
+    response = client.request_with_retries("POST", "/workspaces/current/taggings", json=body)
+    raise_for_status_with_text(response)
