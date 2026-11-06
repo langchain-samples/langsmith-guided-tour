@@ -1,0 +1,27 @@
+modules/07_deploy_optional.ipynb
+  s_3d1bdb9585c62f::t_dc3a3ee3ab8014 47,305,323-347,359,380
+agents/managed/client_research/tools/search.py
+  s_3d1bdb9585c62f::t_c8cd065aaf9f35 14-18
+utils/deployment.py
+  s_3d1bdb9585c62f::t_8b61d02897745a 11,19,68-79
+tests/test_deployable_agents.py
+  s_3d1bdb9585c62f::t_8b61d02897745a 82-101
+tests/test_deployment.py
+  s_3d1bdb9585c62f::t_8b61d02897745a 7,9,62,64-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a8699e6046ed8cd4271de601d82240daf0fe52b3",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
