@@ -1,39 +1,40 @@
 # LangSmith POC Modules
 
-Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC. The modules cover the full agent engineering loop — build, trace, evaluate, deploy, and surface failure modes — against a single example agent.
+Self-directed Jupyter notebooks for engineers evaluating LangSmith during a POC. The modules cover the full agent engineering loop (build, trace, find failures, evaluate, govern and deploy) against a single example agent: a client research assistant for a wealth management firm, with a planted flaw in its client lookup tool for LangSmith to find.
 
 ## The Modules
 
 | # | Module | Notebook | Duration |
 |---|--------|----------|----------|
-| **00** | **Setup** — env, keys, service verification | [`modules/00_setup.ipynb`](modules/00_setup.ipynb) | ~10 min |
-| **01** | **Build a Deep Agent** — harness, tools, subagents, backends, middleware, HITL, AGENTS.md, skills (optional) | [`modules/01_build_a_deep_agent_optional.ipynb`](modules/01_build_a_deep_agent_optional.ipynb) | ~45 min |
-| **02** | **Tracing** — generate traces and query them with `list_runs` + filter DSL | [`modules/02_tracing.ipynb`](modules/02_tracing.ipynb) | ~20 min |
-| **03** | **Finding Failure Modes** — Chat, Insights Agent, and Engine | [`modules/03_finding_failure_modes.ipynb`](modules/03_finding_failure_modes.ipynb) | ~30 min |
-| **04** | **Datasets and Experiments** — offline evaluation: final-response, single-step, trajectory | [`modules/04_datasets_and_experiments.ipynb`](modules/04_datasets_and_experiments.ipynb) | ~30 min |
-| **05** | **Online Evaluations** — LLM-as-judge run rules that score new traces automatically | [`modules/05_online_evals.ipynb`](modules/05_online_evals.ipynb) | ~25 min |
-| **06** | **Annotation Queues** — route low-scoring runs to human review | [`modules/06_annotation_queues.ipynb`](modules/06_annotation_queues.ipynb) | ~20 min |
-| **07** | **Deploy + Govern** — apply workspace-level gateway policies and ship the agent via LangSmith Deployments (optional) | [`modules/07_deploy_and_govern_optional.ipynb`](modules/07_deploy_and_govern_optional.ipynb) | ~25 min |
+| **00** | **Setup**: keys, register the agent, first trace, CLI and Remote MCP, a model for LangSmith | [`modules/00_setup.ipynb`](modules/00_setup.ipynb) | ~15 min |
+| **01** | **Build a deep agent** (optional): built-in tools, your own tools, planning, subagents, memory, middleware, approvals, skills, interpreters | [`modules/01_build_a_deep_agent_optional.ipynb`](modules/01_build_a_deep_agent_optional.ipynb) | ~45 min |
+| **02** | **Tracing**: generate traffic, turn on Engine, read threads and trajectories, search, query traces from code, the CLI and MCP | [`modules/02_tracing.ipynb`](modules/02_tracing.ipynb) | ~25 min |
+| **03** | **Engine**: the issue Engine files, its evidence, the proposed fix, offline examples, triage, Insights, Red Teaming | [`modules/03_engine.ipynb`](modules/03_engine.ipynb) | ~25 min |
+| **04** | **Online evals and Automations**: LLM judges on every turn and thread, automations that fill a golden dataset and a review queue | [`modules/04_online_evals.ipynb`](modules/04_online_evals.ipynb) | ~25 min |
+| **05** | **Offline evals**: the golden dataset, judge and trajectory evaluators, a baseline vs. a fix, comparison, the Playground | [`modules/05_offline_evals.ipynb`](modules/05_offline_evals.ipynb) | ~30 min |
+| **06** | **Govern model and tool calls** (optional): LLM Gateway data and spend policies, the Tool Gateway, tool policies | [`modules/06_govern_optional.ipynb`](modules/06_govern_optional.ipynb) | ~30 min |
+| **07** | **Deploy** (optional): deploy to a Staging environment, call the Agent Server, Managed Deep Agents, Engine fix validation | [`modules/07_deploy_optional.ipynb`](modules/07_deploy_optional.ipynb) | ~40 min |
 
-Modules are designed to run in order. The full sequence is ~3.5 hours; the required-only path (skipping 01 and 07) is ~2 hours.
+Modules are designed to run in order. The full sequence is about 4 hours; the required path (00, 02, 03, 04, 05) is about 2 hours.
 
 **Optional modules** are tagged `_optional` in the filename:
-- **Module 01** introduces the `deepagents` framework from scratch. Skip if already familiar with custom tools, subagents, and prompts.
-- **Module 07** covers deployment via LangSmith. Skip if you don't have deployment permissions or are using LangSmith strictly for observability and evaluations.
+- **Module 01** introduces the `deepagents` framework from scratch. Skip it if you already know custom tools, subagents and middleware.
+- **Module 06** needs LLM Gateway and Tool Gateway access, and some sections need an Organization Admin.
+- **Module 07** needs a LangSmith Cloud workspace with Deployments enabled.
 
-The remaining modules form the core observability + evaluation loop.
+Beta features (Engine fix validation, Red Teaming, tool policies and others) are gated in the notebooks: each has a **Requires** note and a way to continue without it.
 
 ## Prerequisites
 
 - Python 3.11+
-- [uv](https://docs.astral.sh/uv/getting-started/installation/) (recommended) or pip
-- A LangSmith account ([sign up](https://smith.langchain.com))
-- An API key from your model provider (Anthropic by default; OpenAI, Azure OpenAI, and AWS Bedrock are also supported — see *Switching Models* below)
-- A Tavily API key for the web search tool ([get one](https://tavily.com))
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- A LangSmith Cloud account ([sign up](https://smith.langchain.com)) with an agent-based workspace. Project-based and self-hosted workspaces work too: set `LANGSMITH_PROJECT` in `.env` (Module 00 explains).
+- Model access: an LLM Gateway key by default, or a provider key (see *Switching Models*)
+- A Tavily API key for the agent's web search ([get one](https://tavily.com))
 
 ## Setup
 
-Module 00 walks through this end-to-end with verification cells. The short version:
+Module 00 walks through this end to end with verification cells. The short version:
 
 ```bash
 # 1. Install dependencies
@@ -47,93 +48,90 @@ cp .env.example .env
 uv run jupyter notebook
 ```
 
-Then open `modules/00_setup.ipynb` and run the cells in order to verify Python, dependencies, and credentials.
+Then open `modules/00_setup.ipynb` and run the cells in order.
 
 | Key | Required for | Where to get one |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Modules 01–07 (default model provider) | <https://console.anthropic.com> |
-| `LANGSMITH_API_KEY` | All modules (tracing + evaluations) | <https://smith.langchain.com> |
-| `TAVILY_API_KEY` | Modules 01–06 (web search tool used by the agent) | <https://tavily.com> |
+| `LANGSMITH_API_KEY` | All modules (tracing, evals, Engine, deploy) | LangSmith **Settings** → **API Keys** (a Personal Access Token) |
+| `LANGSMITH_GATEWAY_API_KEY` | Every model call (default model setup), and Module 06 sections 1–3 | A LangSmith key for a workspace whose LLM Gateway serves the model |
+| `TAVILY_API_KEY` | The agent's web search | <https://tavily.com> |
 
-Module 06 (Deploy) additionally requires a LangSmith **service key** (`lsv2_sk_...`), not a personal access token, for deployment permissions.
+`.env.example` lists the optional settings: workspace ID, agent ID and environment, or a project name for project-based workspaces.
+
+Features that call a model inside LangSmith (Chat, online judges, the Playground, Insights) use your workspace's own LLM Gateway or model configurations, not your `.env`. Module 00 section 6 covers this.
 
 ## Switching Models
 
-All modules import `model` from `utils/models.py`. Change one line there to swap providers — no notebook edits required.
+Every module and agent builds its model from `utils/models.py`. To switch, uncomment one `MODEL_SPEC` / `API_KEY_ENV` pair there; no notebook edits needed.
 
 ```python
 # utils/models.py
 
-# Anthropic (default)
-model = init_chat_model("anthropic:claude-sonnet-4-6")
+# OpenAI gpt-5.6-luna via the LangSmith LLM Gateway (default)
+MODEL_SPEC = {"model": "openai:gpt-5.6-luna", "base_url": "https://gateway.smith.langchain.com/openai", "use_responses_api": True}
+API_KEY_ENV = "LANGSMITH_GATEWAY_API_KEY"
 
-# OpenAI
-# model = init_chat_model("openai:gpt-4.1-mini")
-
-# Azure OpenAI
-# from langchain_openai import AzureChatOpenAI
-# model = AzureChatOpenAI(azure_deployment="gpt-4.1-mini", streaming=True)
-
-# AWS Bedrock
-# from langchain_aws import ChatBedrockConverse
-# model = ChatBedrockConverse(provider="anthropic", model_id="...")
+# Anthropic, direct
+# MODEL_SPEC = {"model": "anthropic:claude-sonnet-4-6"}
+# API_KEY_ENV = "ANTHROPIC_API_KEY"
 ```
 
-Then set the matching API key environment variable in `.env`. See `.env.example` for the full set of supported provider variables.
+The file also has Anthropic through the Gateway, OpenAI direct, Azure OpenAI and AWS Bedrock. Set the matching key in `.env`.
 
-## Deploy + Govern (Module 07)
+## Deploy (Module 07)
 
-Module 07 covers two things: wiring up the LangSmith LLM Gateway with a workspace-level PII/secrets policy, then deploying the governed agent to LangSmith Deployments using the `langgraph` CLI (installed by `uv sync`). The deploy config is `langgraph.json` at the repo root. Two graphs are registered: `client_research` (the primary deployable) and `base_research_agent` (a second example for inspection).
+Module 07 deploys the agent with `langgraph deploy --agent-id --agent-environment staging --remote`, so the deployment's traces land in your agent's **Staging** environment. The config is `langgraph.json` at the repo root, with two graphs: `client_research` (the deployable agent, which reuses the notebook agent's tools) and `base_research_agent` (a second example). Deployment secrets come from `.env.deploy`, which the notebook writes with only the model and Tavily keys.
 
-Your `LANGSMITH_API_KEY` must have deployment permissions — use a service key (`lsv2_sk_...`), not a personal access token. The gateway sections require `LANGSMITH_API_KEY_GATEWAY` (same value) and `WORKSPACE_ID` — see `.env.example`.
+The same module hosts the research half of the agent as a **Managed Deep Agent** from `agents/managed/client_research/` with the `mda` CLI (`uv tool install --upgrade managed-deepagents`, 0.10.1 or later).
+
+Your `LANGSMITH_API_KEY` must be able to create deployments; a **Tracing Only** key can't.
 
 ## Project Structure
 
 ```
 langsmith-guided-tour/
-├── README.md                                  (this file)
-├── pyproject.toml                             (shared dependencies)
+├── README.md
+├── pyproject.toml                    (shared dependencies)
 ├── .env.example
-├── langgraph.json                             (registers deployable graphs)
+├── langgraph.json                    (registers the deployable graphs)
 ├── utils/
-│   ├── config.py                              (active agent + project name — single source of truth)
-│   ├── models.py                              (model initialization — swap providers here)
-│   ├── search.py                              (resilient Tavily wrapper with canned fallbacks)
-│   └── langsmith_rules.py                     (helpers for run rules + annotation queues)
+│   ├── config.py                     (agent, environments, dataset and queue names: single source of truth)
+│   ├── models.py                     (model setup: switch providers here)
+│   ├── search.py                     (resilient Tavily wrapper with canned fallbacks)
+│   ├── traffic.py                    (seed traffic for Modules 02 and 04)
+│   ├── notebook.py                   (links printed by the notebooks)
+│   ├── workspace.py                  (workspace secrets, model configurations, agent tags)
+│   ├── engine_reports.py             (Insights and Red Teaming lookups)
+│   ├── langsmith_rules.py            (online judges and automations)
+│   ├── evaluators.py                 (offline eval helpers)
+│   ├── gateway.py                    (LLM Gateway and Tool Gateway helpers)
+│   └── deployment.py                 (deployment secrets and lookups)
 ├── agents/
-│   ├── client_research_agent.py               (eval-safe agent imported by Modules 02–05 via utils.config)
-│   └── deployable_agents/
-│       ├── client_research/                   (deployable variant — AGENTS.md, skills, CompositeBackend)
-│       │   ├── agent.py
-│       │   ├── AGENTS.md
-│       │   ├── deepagents.toml
-│       │   └── skills/
-│       │       ├── client-brief/SKILL.md
-│       │       └── portfolio-update/SKILL.md
-│       └── base_research_agent/               (second deployable, kept as reference)
-│           ├── agent.py
-│           ├── AGENTS.md
-│           ├── deepagents.toml
-│           └── skills/
-├── images/                                    (diagrams + screenshots referenced by the notebooks)
+│   ├── client_research_agent.py      (the agent every module traces, with its planted flaw)
+│   ├── deployable_agents/
+│   │   ├── client_research/          (deployable variant: AGENTS.md, skills)
+│   │   └── base_research_agent/      (second deployable, kept as reference)
+│   └── managed/
+│       └── client_research/          (Managed Deep Agent: agent.py, instructions.md, skills/, tools/)
+├── data/                             (seed conversations and golden dataset seed)
+├── images/                           (diagrams and screenshots used by the notebooks)
 ├── modules/
 │   ├── 00_setup.ipynb
 │   ├── 01_build_a_deep_agent_optional.ipynb
 │   ├── 02_tracing.ipynb
-│   ├── 03_finding_failure_modes.ipynb
-│   ├── 04_datasets_and_experiments.ipynb
-│   ├── 05_online_evals.ipynb
-│   ├── 06_annotation_queues.ipynb
-│   └── 07_deploy_and_govern_optional.ipynb
+│   ├── 03_engine.ipynb
+│   ├── 04_online_evals.ipynb
+│   ├── 05_offline_evals.ipynb
+│   ├── 06_govern_optional.ipynb
+│   └── 07_deploy_optional.ipynb
+├── tests/                            (notebook structure and helper tests: uv run --with pytest pytest -q)
 └── skills/
-    └── customize-poc/                         (Claude Code skill for adapting this repo to a new domain)
-        ├── SKILL.md
-        └── notebook-customization-guide.md
+    └── customize-poc/                (Claude Code skill for adapting this repo to a new domain)
 ```
 
 ## Customizing for a New Domain
 
-The repo ships specialized for a client research use case. To adapt it for a different industry or use case, the `customize-poc` skill at `skills/customize-poc/` walks a coding agent (Claude Code, for example) through seven structured discovery questions, then executes the end-to-end customization across the agent code, configuration, and all eight notebook modules.
+The repo ships specialized for a client research use case. To adapt it for a different industry or use case, the `customize-poc` skill at `skills/customize-poc/` walks a coding agent (Claude Code, for example) through structured discovery questions, then customizes the agent code, configuration and the notebook modules.
 
 ### Workflow
 
@@ -148,9 +146,9 @@ The repo ships specialized for a client research use case. To adapt it for a dif
    git checkout -b examples/<your-vertical>
    ```
 
-3. **Open the repo in a coding agent** and invoke the `customize-poc` skill. The skill auto-loads from `.claude/skills/customize-poc/` in any Claude Code session opened on this repo — start the session, then ask the agent to invoke `customize-poc`.
+3. **Open the repo in a coding agent** and invoke the `customize-poc` skill. The skill auto-loads from `.claude/skills/customize-poc/` in any Claude Code session opened on this repo.
 
-4. **Answer the discovery questions.** The skill asks seven structured follow-ups one at a time (persona, tools, demo data, example queries, eval criteria, deployable identity, skills). Three approval checkpoints — after the spec, after the agent code, before the dataset — catch misunderstandings before they propagate through the notebooks.
+4. **Answer the discovery questions.** The skill asks its follow-ups one at a time (persona, tools, demo data, example queries, eval criteria, deployable identity, skills), with approval checkpoints before changes propagate through the notebooks.
 
 5. **Review the output.** The skill runs validation at the end (import probes, notebook syntax checks, residual-content greps). Spot-check a few notebook cells for tone and accuracy before committing.
 
@@ -165,14 +163,17 @@ To contribute a new example back to the samples repo, open a PR against `main`. 
 
 ## Common Issues
 
+**Online judges score nothing, or feedback shows `Required workspace secret "OPENAI_API_KEY" is missing`**
+The judges in Module 04 run on your workspace's own LLM Gateway. Add a provider key as a workspace secret, or Gateway Credits, then rerun the traffic cell.
+
+**Web search returns canned results**
+Your Tavily key is out of searches or unreachable. `utils/search.py` falls back to canned results so the notebooks still run; add a key with searches left for live results.
+
 **`langgraph deploy` fails with 403 / permission denied**
-Your API key is a personal access token. Generate a service key (`lsv2_sk_...`) in LangSmith **Settings → Organizations → Access and Security → API Keys**.
+Your key can't create deployments. Use a Personal Access Token or service key with deployment permissions, not a **Tracing Only** key.
 
 **Notebook can't find `utils` / `agents`**
 Each module's setup cell prepends the repo root to `sys.path`. If you moved a notebook, update the `Path().resolve().parent` line to point at the repo root.
 
-**Anthropic API: `tool_use ids were found without tool_result blocks immediately after`**
-This appears if you submit a regular message to the deployed agent in Studio while a HITL interrupt is pending. The deployable variant in this repo ships without HITL — but if you re-add `interrupt_on={...}` to `agents/deployable_agents/client_research/agent.py`, send the resume command as a `Command(resume=...)` payload rather than plain text.
-
-**Chat (Module 07) unavailable**
-The in-workspace AI assistant requires a model provider API key configured as a workspace secret in LangSmith **Settings**. Configure one before invoking Chat with `Cmd+I` / `Ctrl+I`.
+**Chat (Module 03) unavailable**
+Chat calls a model inside LangSmith. Give your workspace a model (Module 00 section 6) before opening Chat with `Cmd+I` / `Ctrl+I`.
