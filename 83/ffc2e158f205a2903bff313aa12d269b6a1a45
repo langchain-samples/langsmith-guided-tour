@@ -1,0 +1,19 @@
+modules/06_govern_optional.ipynb
+  s_3d1bdb9585c62f::t_b71f01b5c363b8 39,48-53,99,102,108,117,179,210,213,219,221,417,420,425,462,465,470-471
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "83ffc2e158f205a2903bff313aa12d269b6a1a45",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
