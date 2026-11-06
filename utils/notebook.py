@@ -28,3 +28,13 @@ def print_files(files: dict) -> None:
         if len(lines) > MAX_FILE_LINES:
             print("…")
         print()
+
+
+def engine_url(project_url: str) -> str:
+    """Return the link to Engine for a tracing project."""
+    return f"{project_url}?tab=issues"
+
+
+def engine_issue_url(project_url: str, issue_id: str) -> str:
+    """Return the link that opens one Engine issue."""
+    return f"{engine_url(project_url)}&issue={issue_id}"
