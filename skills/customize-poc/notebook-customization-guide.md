@@ -1,165 +1,146 @@
 # Notebook Customization Guide
 
-Companion to the `customize-poc` skill. Per-notebook customization detail for Phase 4 of the workflow.
+Companion to the `customize-poc` skill: what to change in each notebook in Phase 4. Cell numbers are 0-based indices in the baseline; confirm them in the file before editing, since they shift as cells change.
 
 ## Notebook editing mechanics
 
 Two patterns that cause silent failures if ignored:
 
-**Write source as a list of lines, not one string.** Each cell's `source` field in the `.ipynb` JSON should be a list of strings, one per line (each ending with `\n` except the last). Writing it as a single multi-line string causes Python escape sequences like `\n` inside f-strings to become literal newlines in the cell source, producing syntax errors that only surface during `ast.parse` validation.
+**Write source as a list of lines, not one string.** Each cell's `source` in the `.ipynb` JSON is a list of strings, one per line (each ending with `\n` except the last). A single multi-line string turns `\n` escapes inside f-strings into literal newlines, which only fails at `ast.parse`.
 
-**Skip Jupyter magic lines in the syntax check.** Cells containing `!` shell commands are not valid Python. Skip any cell where `any(line.startswith('!') for line in src.splitlines())` — the check must look at all lines, not just the first, because many cells mix a comment line with a shell command.
+**Skip shell lines in the syntax check.** Cells with `!` commands aren't Python. Skip a cell when `any(line.startswith('!') for line in src.splitlines())`; many cells mix a comment line with a shell command.
+
+**Clear outputs** before committing, and keep every `> **Requires:** … **Without it:** …` note, image, and caption in place.
 
 ## File map
 
-The customization touches these files. Anything not listed stays untouched.
-
 ```
-agents/<use_case>_agent.py                                     (NEW)
-agents/deployable_agents/<use_case>/agent.py                   (NEW)
-agents/deployable_agents/<use_case>/AGENTS.md                  (NEW)
-agents/deployable_agents/<use_case>/deepagents.toml            (NEW)
-agents/deployable_agents/<use_case>/skills/<skill>/SKILL.md    (NEW per skill from Phase 1 step 7)
-utils/config.py                                                (MODIFIED — load_active_agent branch + defaults)
-utils/evaluators.py                                            (MODIFIED — correctness_schema description field)
-langgraph.json                                                 (MODIFIED — add new graph entry)
-modules/00_setup.ipynb                                         (MODIFIED — Module Map labels)
-modules/01_build_a_deep_agent_optional.ipynb                   (MODIFIED — substantial)
-modules/02_tracing.ipynb                                       (MODIFIED — warm-up prompts)
-modules/03_finding_failure_modes.ipynb                         (MODIFIED — Chat examples)
-modules/04_datasets_and_experiments.ipynb                      (MODIFIED — substantial)
-modules/05_online_evals.ipynb                                  (MODIFIED — judge + trigger prompts)
-modules/06_annotation_queues.ipynb                             (MODIFIED — trigger prompts)
-modules/07_deploy_and_govern_optional.ipynb                               (MODIFIED — §7 test queries + deploy name)
+agents/<use_case>_agent.py                          (NEW: replaces agents/client_research_agent.py)
+agents/deployable_agents/<use_case>/                (NEW: agent.py imports from the eval agent; AGENTS.md; skills/)
+agents/managed/<use_case>/                          (NEW: self-contained Managed Deep Agent folder)
+utils/config.py                                     (names, ACTIVE_AGENT, load_active_agent)
+langgraph.json                                      (graph key and path)
+data/seed_conversations.json                        (24 traffic conversations)
+data/golden_seed.json                               (golden dataset seed, with the <entity>-lookup split)
+tests/                                              (names the tests pin)
+README.md                                           (intro, paths)
+modules/00_setup.ipynb                              (light)
+modules/01_build_a_deep_agent_optional.ipynb        (heavy: nearly every request string)
+modules/02_tracing.ipynb                            (moderate: tool name in filters and queries)
+modules/03_engine.ipynb                             (moderate: the issue's words and prose)
+modules/04_online_evals.ipynb                       (moderate: judge prompts)
+modules/05_offline_evals.ipynb                      (heavy: judge, trajectory match, fix tool, split)
+modules/06_govern_optional.ipynb                    (moderate: redaction pattern and prompts)
+modules/07_deploy_optional.ipynb                    (moderate: questions and paths)
 ```
 
-`agents/deployable_agents/base_research_agent/` is not touched — it serves as the baseline reference for the deployable agent shape.
-
-Modules 01 and 07 are tagged `_optional` in the filename. They can be skipped without breaking the rest of the sequence — 01 covers the introductory deep-agents walkthrough; 07 covers deployment, which requires LangSmith Deployments permissions to actually run.
+Shared code already carries most of the variant: notebooks import names from `utils/config.py`, build the agent with `build_<use_case>_agent()`, and replay traffic with `utils/traffic.generate_traffic()` from `data/seed_conversations.json`. Generic helpers (`utils/langsmith_rules.py`, `utils/evaluators.py`, `utils/gateway.py`, `utils/deployment.py`, `utils/workspace.py`, `utils/notebook.py`) don't change.
 
 ## Per-notebook detail
 
-### NB00 — Setup
+The baseline names below are what to swap: `get_client_profile` → your lookup tool, `client_id` → its ID argument, `CL-0042` → a real ID from your data, `find_client_id` → your fix tool, `client-lookup` → `<entity>-lookup`.
 
-Minimal change. The keys table, the model-provider note, the LangSmith API key creation steps, and the troubleshooting section stay generic across customizations. Only update:
-
-- **Module Map table** (cell 2): row labels may briefly mention the use case if it adds clarity. The notebook references — `01_build_a_deep_agent_optional.ipynb` etc. — stay the same.
-
-### NB01 — Build a Deep Agent (optional)
-
-Substantial. The notebook walks through deep-agent capabilities section-by-section: 1.1 (bare agent / built-in filesystem) → 1.2 (custom tools) → 1.3 (subagents) → 1.4 (backends + memory) → 1.5 (middleware) → 1.6 (HITL) → 1.7 (AGENTS.md + skills) → 1.8 (complete agent). Inspect the baseline `modules/01_build_a_deep_agent_optional.ipynb` to confirm the section structure before editing. Swap:
-
-- **§1.2 inline `web_search` definition:** keep the `@tool` pattern, swap the body if your domain uses a different search/lookup pattern.
-- **§1.3 imported tool:** `from agents.<use_case>_agent import <lookup_tool>` (e.g., `get_client_profile` → `get_case_history` for the new domain).
-- **§1.3 research subagent** definition: domain-flavor the system prompt (e.g., "research assistant for a wealth management firm" → "research assistant for an insurance carrier").
-- **§1.3 main agent system_prompt:** match the deployable's identity language.
-- **All demo prompts** (1.1 haiku can stay neutral; 1.2–1.8 should use new use case queries from Phase 1 step 4).
-- **§1.4 memory demo prompts:** swap the baseline "remember that..." example with a domain-equivalent fact about a Phase 1 demo record.
-- **§1.5 compliance rules:** the baseline rules (no SSNs, cite sources, flag non-public info) generalize across most domains. Adjust the third rule to fit the new domain (e.g., for healthcare: "flag any request involving PHI"; for legal: "cite jurisdiction").
-- **§1.6 HITL demo:** prompt should produce a `write_file` call — use a "write a brief/summary on [example demo record]" form.
-- **§1.7 AGENTS.md + skill content:** paste verbatim from `agents/deployable_agents/<use_case>/AGENTS.md` and the first skill's SKILL.md.
-- **§1.8 complete agent:** swap tool list, subagent, identity.
-- **Closing note (last cell):** update the path references to point at `agents/<use_case>_agent.py` and `agents/deployable_agents/<use_case>/agent.py`.
-
-### NB02 — Tracing
+### NB00: Setup
 
 Light. Swap:
+- [9] `client.agents.create(..., name="Client research agent")`: the display name.
+- Prose naming `client-research-agent` ([7], [8], [10]) and `client-research-model` ([24]).
+- [5] keys table: keep the Tavily row while the agent uses `web_search`.
 
-- **Warm-up prompts (cell 4):** pick 5 from Phase 1 step 4 with varied shapes (single-tool, lookup-only, multi-step, edge case, simple research). The diversity matters — the filter DSL examples need different trace shapes to demonstrate against.
-- **Filter examples:** stay generic. If the research subagent has a non-default name (rare), update the by-name filter example (`eq(name, "research-agent")` → new name).
-- **Screenshot placeholders:** stay as-is. Capture screenshots separately against the customized agent's LangSmith UI.
+Leave the key steps, CLI, Remote MCP and section 6 (`share_gateway_key`) alone.
 
-### NB03 — Finding Failure Modes
+### NB01: Build a deep agent (optional)
 
-Light. Almost everything generalizes. Swap:
+Heavy: almost every request string is domain content. Swap:
+- [0], [1], [58]: agent name in prose and the recap.
+- [5] `HAIKU_REQUEST`: a neutral or domain topic.
+- [12] `web_search` docstring and `SYSTEM_PROMPT`; [11], [13] the summary request; [15], [17] the comparison request.
+- [19]–[21]: the research subagent's description and prompt, and `NEWS_REQUEST`.
+- [23]–[26] memory: `MEMORY_PROMPT` with its `/memories/<entities>/` path and a fact about one demo record, plus the file name the next cells read.
+- [28], [29], [31] middleware: `COMPLIANCE_RULES` (keep the shape: one data rule, one sourcing rule, one confidentiality rule) and `EARNINGS_REQUEST`.
+- [33], [35] approval: `NOTE_REQUEST` and the file path it writes.
+- [40], [41], [43], [44]: `AGENTS_MD` (it tells the agent to call the lookup tool first, which triggers the flaw), the first skill's `SKILL.md`, and `BRIEF_REQUEST`.
+- [45]–[47] interpreters: `HOLDINGS`, `CODE_REQUEST`, and the Python check. The check recomputes the same numbers, so keep the data shape (a list of items with a weight and a value) or rewrite both together.
+- [49], [51] dynamic subagents: three parallel research topics in `WORKFLOW_REQUEST`.
+- [53]–[57] complete agent: imports the lookup tool and `<entity>_lookup_errors`, and `MEETING_REQUEST` asks **by name** so the flaw fires; [57] expects error rows for those lookups.
 
-- **Chat section example questions:** use domain-specific examples (e.g., "did any users get an unknown-<entity> response?", "what's the latency distribution for runs that delegated to the research subagent?"). Two or three example questions is enough.
-- **Chat screenshot placeholder caption:** mention the new domain in the alt text if useful.
+Leave the harness table, built-in tools, middleware and context-management prose, the interrupt and resume mechanics, and the beta **Requires** notes.
 
-The concept intro on the shift in scale, the Insights configuration steps, the Engine availability callout, and the closing recap all describe LangSmith features that work identically across use cases. Leave them alone.
+### NB02: Tracing
 
-### NB04 — Datasets and Experiments
+Moderate. The traffic itself comes from `data/seed_conversations.json`. Swap:
+- [2] the agent import; [3] the description of the 24 conversations (their categories).
+- [6] Engine setup prose: agent name and agent file path.
+- [10] `TURNS`: a two-turn thread on two domain topics.
+- [14], [16], [21], [22], [24]: prose about the failed lookup and its argument.
+- [15], [23], [25], [27], [28], [30]: the lookup tool's name in filters, CLI `--name`, and `MCP_PROMPT`.
+- [17] the typed search `name:<lookup_tool> AND status:error`; [19], [20] the AI search query ("the agent could not find the <entity> the user asked about").
 
-Largest swap. **Approval gate 3 fires here.**
+Flaw dependence: traffic must produce failed lookup runs ([15] reads one), several threads with 2+ failures and different IDs ([24]), and root runs that never error ([21]).
 
-- **Dataset name:** `<use_case>-evals`.
-- **Five dataset examples** — each carries three reference fields used by the three evaluator types:
-  - `reference_answer` — rubric (success criteria, not verbatim expected text) for the LLM judge in Part 2.
-  - `expected_first_tool` — the first tool call expected for the single-step eval in Part 3.
-  - `trajectory` — full expected tool-call sequence for the trajectory eval in Part 4.
+### NB03: Engine
 
-  Pick five Phase 1 step 4 queries spanning:
-  1. Lookup only (1 tool, expected_first_tool = the domain lookup tool, trajectory = [lookup])
-  2. Research only (1 tool, expected_first_tool = "task", trajectory = ["task"])
-  3. Lookup + research (2 tools, expected_first_tool = the lookup tool, trajectory = [lookup, "task"])
-  4. Lookup + research + file write (3 tools) — optional fifth shape; useful for trajectory eval depth
-  5. Edge case (unknown entity fall-through — agent reports not found)
+Moderate. Swap:
+- [4], [7], [9], [27], [28]: "client lookup" wording.
+- [8] `LOOKUP_WORDS`: the terms that find the issue in its title or description (tool name, "<entity> lookup", "<entity> id").
+- [15], [18]: the argument and the docstring-vs-ID explanation of the proposed fix.
+- [22] the examples dataset description; [25] the dataset name in prose (match `ENGINE_EXAMPLES_DATASET`).
+- [31] the Insights guided question ("What do <personas> ask this agent for…"); [34] the expected categories.
 
-- **Part 2 judge:** the `CorrectnessGrade` TypedDict + `correctness_judge_prompt` rewrite to enforce the eval criteria. The "rubric is success criteria, not literal text" framing in the prompt stays.
+Flaw dependence: Engine files one issue about the lookup, its evidence shows a bad ID then a rejection, and the fix points at the docstring or a name-to-ID tool. Modules 05 and 07 reuse that issue.
 
-### NB05 — Online Evaluations
+Leave the click paths, triage, Insights and Red Teaming steps, and the **Requires** notes.
 
-Significant. Swap:
+### NB04: Online evals and Automations
 
-- **`judge_prompt`** (Section 2, Step 1 code cell): rewrite to enforce the eval criteria from Phase 1 step 5. Each criterion gets one bullet in the prompt.
-- **`display_name`** in `create_run_rule`: `<use_case>-online-correctness`.
-- **Trigger prompts (Step 3):** use new use case queries. Include a mix of well-formed and edge-case prompts.
+Moderate. Swap:
+- [4] `CORRECTNESS_PROMPT` and [9] `RESOLVED_PROMPT`: the persona and the Phase 1 eval criteria, one sentence each. Keep the 0–1 scale and the schemas.
+- [13], [18]: dataset and queue names in prose (match `utils/config.py`).
+- [19] `FAILURE_TYPES`: keep `tool_error` and `judge_disagrees`; rename the others only if the domain has better words.
+- [31] "low scores cluster on <entity>-lookup questions".
 
-The output schema (`correctness_schema`) is defined in `utils/evaluators.py` and imported into the notebook — update it there during Phase 3. The `description` field should reflect the new domain; the `correctness` boolean + `comment` string shape is generic and usually stays as-is.
+Leave the filters, thresholds, `upsert_*` calls and sections 7–8.
 
-Section 1 (UI walkthrough) is generic — the step-by-step instructions and image placeholders apply identically across use cases. Leave it untouched.
+### NB05: Offline evals
 
-Verify the judge's failure conditions actually fire on at least one of the trigger prompts — without that, NB06's annotation queue stays empty.
+Heavy. **This is where approval gate 3's golden rows get used.** Swap:
+- [2] imports (the data dict, builder, lookup tool, `web_search`).
+- [0], [5]–[7], [24], [26], [32], [36]: prose about the lookup, the split and the fix.
+- [11], [34]: the `!langsmith` commands hardcode the dataset name and `--split`; match `GOLDEN_DATASET` and the new split.
+- [13] `CORRECTNESS_PROMPT`: the persona and criteria, including "can't find the <entity>".
+- [15] trajectory match (tee-up in [14]): `tool_args_match_overrides={"<lookup_tool>": ["<id_arg>"]}`.
+- [21] `BASELINE_TOOLS`.
+- [27] the fix tool `find_<entity>_id(name)`: searches the data dict by name; its docstring example uses a real ID; the demo call uses a partial name.
+- [29] `build_<use_case>_agent(extra_tools=[...])`; [31] the experiment prefix and `variant` (`lookup-fix`).
+- [38]–[42]: the split filter and the Playground step that edits the ID argument's description to a real ID.
 
-### NB06 — Annotation Queues
+Flaw dependence: baseline lookup rows score low with `tool_errors` above 0; the fix lowers `tool_errors` and raises the other scores on the split while other rows hold.
 
-Light. Swap:
+### NB06: Govern model and tool calls (optional)
 
-- **Queue name** in `get_or_create_annotation_queue`: `<use_case>-needs-review`.
-- **Routing rule `display_name`:** `<use_case>-route-failures`.
-- **Trigger prompts (Step 3):** updated to invite domain-specific failure modes — unknown identifiers, unanswerable specifics, future predictions if relevant to the domain.
+Moderate. Swap:
+- [5] the routing question; [18] `desk_question`; [25] `kit_question`: domain research questions.
+- [7], [8], [12]: the sensitive field's description and regex (`ACCT-[0-9]{8}` → your pattern).
+- [10], [11] `leaky_prompt`: asks for a record **by its real ID** on purpose, so the lookup succeeds and the sensitive field flows into the request.
+- [15], [16]: the team value `advisory-desk` and the cap name `tour-<team>-cap`.
+- [24] the kit's `web_search` docstring.
 
-The caveat about empty queues stays as-is — applies universally.
+Leave policy shapes, headers, the Parallel kit, the tool policy and cleanup.
 
-### NB07 — Deploy (optional)
+### NB07: Deploy (optional)
 
-Update in two places:
+Moderate. Swap:
+- [0], [5], [21], [34]: prose naming the lookup tool and the issue.
+- [1] the project-based fallback name `--name client-research` and `find_deployment(name=...)`.
+- [6] the import line it looks for in the deployable (`from agents.<use_case>_agent import`).
+- [18] `LOOKUP_QUESTIONS`: three by-name questions, one per demo record, **no IDs**, so the flaw reproduces on the deployment.
+- [20] the graph key (match `langgraph.json`); [22], [23] the managed folder path.
+- [32] `RESEARCH_QUESTION` for the managed agent, capped at two searches.
 
-- **`langgraph deploy` command (`!cd ... && langgraph deploy --name ...`):** the deployment name uses `langsmith-poc-<use_case>`.
-- **§7 test query checklist:** replace with 12 use-case-specific queries spanning four shapes (3 each):
-  1. **Profile / lookup only** — one query per demo record from Phase 1 step 3.
-  2. **Research only** — diverse domain topics.
-  3. **Multi-step** — at least one with a file write to exercise HITL.
-  4. **Edge cases** — unknown entity, unanswerable specifics, speculative refusal.
-- **"What to watch for" guidance:** reference the new trajectory shapes and the agent's specific edge-case behaviors (e.g., "unknown-entity handling should report not found, not fabricate").
+Leave validate / deploy / lookup mechanics, `write_env_subset`, `mda deploy --context-strategy keep-hub`, and the Context Hub TL;DR edit.
 
-The capability table (§6) and operational follow-ups stay as-is.
+## Images
 
-## Image / screenshot placeholders
+Diagrams generalize; keep them: `deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`, `trajectory.png`.
 
-The baseline notebooks reference these image paths. Screenshots are captured from the LangSmith UI of the customized agent — the paths themselves don't change.
-
-```
-images/warm_up_traces.png
-images/filter_traces.png
-images/dataset.png
-images/experiment_result.png
-images/experiments_page.png
-images/experiment_comparison.png
-images/set_baseline_button.png
-images/set_baseline.png
-images/03-rule-editor.png
-images/online_evals.png
-images/annotation_queue.png
-images/deployment_home.png
-images/deployment_docs.png
-images/Studio_testing.png
-images/chat.png
-images/insights_config.png
-images/insights_report.png
-images/engine_config.png
-images/engine_issue.png
-images/engine_triage.png
-```
-
-Some screenshots in NB01 (`deepAgentsDiag.png`, `deepAgentSubagents.png`, `deepAgentBackends.png`, `deepAgentMiddleware.png`, `deepAgentHITL.png`, `Offloading Inputs LangChain.png`, `Offloading Results LangChain.png`, `LangChain Summarization.png`) and NB04 (`final-response.png`, `single-step.png`, `trajectory.png`) are conceptual diagrams. They generalize across use cases — leave them as referenced.
+UI screenshots are named `NN-<slug>.png` (module number first) and show the baseline agent's data. Keep the paths and alt text structure, and tell the user which ones show baseline content so they can retake them against the variant. Screenshots captioned *Example from another agent* are generic stand-ins and can stay.
