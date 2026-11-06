@@ -5,6 +5,6 @@ description = "Research half of the client-research agent as a Managed Deep Agen
 requires-python = ">=3.11"
 dependencies = [
     "langchain-openai>=1.7.4",
-    "managed-deepagents==0.5.2",
+    "managed-deepagents==0.10.1",
     "tavily-python>=0.7.21",
 ]
