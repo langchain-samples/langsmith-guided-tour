@@ -1,0 +1,23 @@
+tests/test_workspace.py
+  s_3d1bdb9585c62f::t_fb6d79dc56c631 1-3,22,68-76
+utils/workspace.py
+  s_3d1bdb9585c62f::t_fb6d79dc56c631 8,52-60
+modules/04_online_evals.ipynb
+  s_3d1bdb9585c62f::t_74b86b0015748d 45,49,223,237-239,289,317-318
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "58162dc7de202c2adff4bf390a869533fdc67c33",
+  "prompts": {},
+  "sessions": {
+    "s_3d1bdb9585c62f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "3aca10c0-5d46-46b5-a441-f1816535cdd9",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
