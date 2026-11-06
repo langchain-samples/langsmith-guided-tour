@@ -79,3 +79,23 @@ def test_managed_agent_name_matches_config():
 def test_managed_agent_has_no_client_lookup():
     sources = [p.read_text() for p in MANAGED_DIR.rglob("*") if p.suffix in {".py", ".md"}]
     assert sources and not any("get_client_profile" in text for text in sources)
+
+
+def test_managed_search_returns_failures_to_the_model(monkeypatch):
+    import sys
+
+    sys.path.insert(0, str(MANAGED_DIR))
+    try:
+        from tools import search
+    finally:
+        sys.path.remove(str(MANAGED_DIR))
+
+    def over_quota(self, *args, **kwargs):
+        raise RuntimeError("This request exceeds your plan's set usage limit.")
+
+    monkeypatch.setattr(search.TavilyClient, "search", over_quota)
+
+    result = search.web_search.invoke({"query": "MSFT"})
+
+    assert result["results"] == []
+    assert "usage limit" in result["error"]

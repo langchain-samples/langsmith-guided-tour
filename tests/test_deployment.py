@@ -4,8 +4,9 @@ import httpx
 import pytest
 from dotenv import dotenv_values
 from langgraph_cli.host_backend import HostBackendClient
+from langsmith import Client
 
-from utils.deployment import find_deployment, reply_text, write_env_subset
+from utils.deployment import context_hub_url, find_deployment, reply_text, write_env_subset
 
 
 def test_write_env_subset_copies_only_named_keys(tmp_path):
@@ -58,9 +59,19 @@ def test_find_deployment_skips_previews_and_filters_by_agent():
 def test_find_deployment_matches_name_exactly():
     resources = [
         {"id": "a", "name": "client-research-managed-old", "source_config": {"custom_url": "https://a"}},
-        {"id": "b", "name": "client-research-managed", "source_config": {"custom_url": "https://b"}},
+        {"id": "b", "name": "client-research-managed", "tenant_id": "ws", "source_config": {"custom_url": "https://b"}},
     ]
-    assert find_deployment(name="client-research-managed", client=_client(resources, [])).id == "b"
+    deployment = find_deployment(name="client-research-managed", client=_client(resources, []))
+
+    assert (deployment.id, deployment.workspace_id) == ("b", "ws")
+
+
+def test_context_hub_url_points_at_the_agent_repo():
+    client = Client(api_url="https://api.smith.langchain.com", api_key="key")
+
+    url = context_hub_url(client, "client-research-managed", "ws")
+
+    assert url == "https://smith.langchain.com/context/client-research-managed?organizationId=ws"
 
 
 @pytest.mark.parametrize(

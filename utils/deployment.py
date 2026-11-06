@@ -8,6 +8,7 @@ from typing import Any
 
 from dotenv import dotenv_values, set_key
 from langgraph_cli.host_backend import ControlPlaneEndpoints, HostBackendClient
+from langsmith import Client
 
 
 @dataclass(frozen=True)
@@ -15,6 +16,7 @@ class Deployment:
     id: str
     name: str
     api_url: str
+    workspace_id: str
 
 
 def write_env_subset(
@@ -63,7 +65,18 @@ def find_deployment(
     api_url = (deployment.get("source_config") or {}).get("custom_url")
     if not api_url:
         raise LookupError(f"Deployment {deployment['id']} has no API URL yet; wait until it is DEPLOYED.")
-    return Deployment(id=str(deployment["id"]), name=str(deployment["name"]), api_url=api_url)
+    return Deployment(
+        id=str(deployment["id"]),
+        name=str(deployment["name"]),
+        api_url=api_url,
+        workspace_id=str(deployment.get("tenant_id", "")),
+    )
+
+
+def context_hub_url(client: Client, repo_handle: str, workspace_id: str) -> str:
+    """Return the LangSmith UI link to a Context Hub agent repo."""
+    # Same path as the Context Hub link on a deployment's Details card.
+    return f"{client._host_url}/context/{repo_handle}?organizationId={workspace_id}"
 
 
 def reply_text(state: Mapping[str, Any]) -> str:
