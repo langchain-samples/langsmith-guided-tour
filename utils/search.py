@@ -238,7 +238,7 @@ _CANNED_RESULTS: list[tuple[tuple[str, ...], list[Result]]] = [
         ),
     ]),
     (("market outlook", "outlook", "forecast", "prediction", "stock perform", "price target",
-      "next month", "next quarter"), [
+      "next month", "next quarter", "rebalance", "rebalancing"), [
         (
             "Market outlook — why short-term stock forecasts are unreliable",
             "https://www.investor.gov/introduction-investing/getting-started/asset-allocation",
@@ -258,7 +258,7 @@ _CANNED_RESULTS: list[tuple[tuple[str, ...], list[Result]]] = [
             "interest-rate risk, while keeping a growth allocation in equities.",
         ),
     ]),
-    (("family office", "family offices", "rebalance", "rebalancing", "return last quarter"), [
+    (("family office", "family offices", "return last quarter"), [
         (
             "Family offices — allocation trends and concentration risk",
             "https://www.reuters.com/business/finance/",
