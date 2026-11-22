@@ -8,9 +8,7 @@ LangSmith LLM Gateway as the production-ready alternative — to make the
 switch, comment out the default below and uncomment the gateway block.
 """
 
-import os
-from dotenv import load_dotenv
-load_dotenv(dotenv_path="../.env", override=True)
+import os  # used by the gateway block below; .env is loaded in utils/__init__.py
 
 from langchain.chat_models import init_chat_model
 
