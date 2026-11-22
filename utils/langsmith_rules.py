@@ -19,6 +19,7 @@ from uuid import UUID
 
 import requests
 from langsmith import Client
+from langsmith.utils import LangSmithNotFoundError
 
 
 # --------------------------------------------------------------------------- #
@@ -45,7 +46,7 @@ def _llm_judge_evaluator(
     prompt: Union[str, Sequence[tuple[str, str]]],
     output_schema: dict,
     *,
-    model_name: str = "gpt-4o-mini",
+    model_name: str = "claude-sonnet-4-6",
     temperature: float = 0,
     input_var: str = "input",
     output_var: str = "output",
@@ -70,18 +71,21 @@ def _llm_judge_evaluator(
     return {
         "structured": {
             "prompt": [list(m) for m in messages],
+            # Same shape the LangSmith UI saves for an Anthropic judge.
             "model": {
                 "lc": 1,
                 "type": "constructor",
-                "id": ["langchain", "chat_models", "openai", "ChatOpenAI"],
+                "id": ["langchain", "chat_models", "anthropic", "ChatAnthropic"],
                 "kwargs": {
                     "model": model_name,
                     "temperature": temperature,
-                    # References the workspace-stored OPENAI_API_KEY secret —
+                    "max_tokens": 8192,
+                    # References the workspace-stored ANTHROPIC_API_KEY secret —
                     # set one in LangSmith → Workspace settings → Secrets.
-                    "api_key": {"lc": 1, "type": "secret", "id": ["OPENAI_API_KEY"]},
+                    "anthropic_api_key": {"lc": 1, "type": "secret", "id": ["ANTHROPIC_API_KEY"]},
                 },
             },
+            "template_format": "mustache",
             "variable_mapping": {input_var: input_var, output_var: output_var},
             "schema": output_schema,
         }
@@ -98,7 +102,7 @@ def create_run_rule(
     # If set: attach an LLM-as-judge online evaluator.
     llm_judge_prompt: Optional[Union[str, Sequence[tuple[str, str]]]] = None,
     llm_judge_schema: Optional[dict] = None,
-    llm_judge_model: str = "gpt-4o-mini",
+    llm_judge_model: str = "claude-sonnet-4-6",
     # If set: route matching runs to this annotation queue.
     add_to_annotation_queue_id: Optional[Union[str, UUID]] = None,
 ) -> dict:
@@ -108,7 +112,11 @@ def create_run_rule(
     raw `payload` LangSmith stored. Either `llm_judge_prompt` (+schema), or
     `add_to_annotation_queue_id`, or both, should be provided.
     """
-    project = client.read_project(project_name=project_name)
+    # A fresh workspace has no project until the first trace; create it so the rule can bind.
+    try:
+        project = client.read_project(project_name=project_name)
+    except LangSmithNotFoundError:
+        project = client.create_project(project_name)
 
     evaluators = []
     if llm_judge_prompt is not None:
