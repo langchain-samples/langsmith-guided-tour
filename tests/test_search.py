@@ -32,6 +32,13 @@ def test_blank_key_counts_as_unset(monkeypatch):
     assert search.resilient_tavily_search("energy sector news").startswith(search.OFFLINE_TAG)
 
 
+def test_placeholder_key_counts_as_unset(monkeypatch):
+    monkeypatch.setenv("TAVILY_API_KEY", "<tavily-api-key>")
+    monkeypatch.setattr(search, "TavilyClient", _forbid_client)
+
+    assert search.resilient_tavily_search("energy sector news").startswith(search.OFFLINE_TAG)
+
+
 def test_client_construction_failure_falls_back(monkeypatch):
     monkeypatch.setenv("TAVILY_API_KEY", "tvly-test")
 

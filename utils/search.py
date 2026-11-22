@@ -428,7 +428,9 @@ def resilient_tavily_search(
     """
     global _default_client
     if client is None:
-        if not os.environ.get("TAVILY_API_KEY", "").strip():
+        key = os.environ.get("TAVILY_API_KEY", "").strip()
+        # "<...>" is the unedited .env.example placeholder; treat it as unset.
+        if not key or key.startswith("<"):
             return f"{OFFLINE_TAG}\n\n{canned_results(query, max_results)}"
         try:
             if _default_client is None:
