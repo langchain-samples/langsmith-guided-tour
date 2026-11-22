@@ -1,6 +1,6 @@
 """Tavily web search with retries and built-in offline results.
 
-Without TAVILY_API_KEY, searches return canned finance/LangChain results tagged `[offline search results]`.
+Without TAVILY_API_KEY, searches return canned finance/LangChain results tagged `[reference results: background, not live news]`.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from typing import Optional
 from tavily import TavilyClient
 
 
-OFFLINE_TAG = "[offline search results]"
+OFFLINE_TAG = "[reference results: background, not live news]"
 
 Result = tuple[str, str, str]  # (title, url, content), shaped like Tavily's results[]
 
@@ -414,7 +414,7 @@ def resilient_tavily_search(
     Returns a Tavily-shaped string (each result formatted as
     `**title**\\nurl\\ncontent`, joined by blank lines) so the caller can return
     it from a `@tool` function as-is. With no `client` and no TAVILY_API_KEY,
-    returns offline results immediately, prefixed with `[offline search results]`.
+    returns offline results immediately, prefixed with `[reference results: background, not live news]`.
 
     Args:
         query: search query to run.

@@ -21,7 +21,7 @@ def test_no_key_returns_offline_results_without_client(monkeypatch):
 
     result = search.resilient_tavily_search("Microsoft quarterly earnings")
 
-    assert result.startswith("[offline search results]")
+    assert result.startswith("[reference results: background, not live news]")
     assert "Azure" in result
 
 
