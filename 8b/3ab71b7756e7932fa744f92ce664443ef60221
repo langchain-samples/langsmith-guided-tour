@@ -1,0 +1,26 @@
+pyproject.toml
+  s_5a0b28b8dbf4a0::t_9fe0cf773fd411 7
+uv.lock
+  s_5a0b28b8dbf4a0::t_a8d0c95a70b9d5 2206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "8b3ab71b7756e7932fa744f92ce664443ef60221",
+  "prompts": {},
+  "humans": {
+    "h_7cae82992be157": {
+      "author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  },
+  "sessions": {
+    "s_5a0b28b8dbf4a0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "77b27734-3ead-4c95-9a76-152903b1f507",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
