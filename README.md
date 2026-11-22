@@ -29,7 +29,7 @@ The remaining modules form the core observability + evaluation loop.
 - [uv](https://docs.astral.sh/uv/getting-started/installation/) (recommended) or pip
 - A LangSmith account ([sign up](https://smith.langchain.com))
 - An API key from your model provider (Anthropic by default; OpenAI, Azure OpenAI, and AWS Bedrock are also supported — see *Switching Models* below)
-- A Tavily API key for the web search tool ([get one](https://tavily.com))
+- Optional: a Tavily API key for live web search ([get one](https://tavily.com)). Without it, search uses built-in offline results.
 
 ## Setup
 
@@ -53,9 +53,11 @@ Then open `modules/00_setup.ipynb` and run the cells in order to verify Python, 
 |---|---|---|
 | `ANTHROPIC_API_KEY` | Modules 01–07 (default model provider) | <https://console.anthropic.com> |
 | `LANGSMITH_API_KEY` | All modules (tracing + evaluations) | <https://smith.langchain.com> |
-| `TAVILY_API_KEY` | Modules 01–06 (web search tool used by the agent) | <https://tavily.com> |
+| `TAVILY_API_KEY` | Optional: live web search for the agent. Without it, search uses built-in offline results | <https://tavily.com> |
 
-Module 06 (Deploy) additionally requires a LangSmith **service key** (`lsv2_sk_...`), not a personal access token, for deployment permissions.
+Module 05's online evaluator runs inside LangSmith and reads an `ANTHROPIC_API_KEY` **workspace secret** (**Settings → Secrets**), not your `.env`.
+
+Module 07 (Deploy) additionally requires a LangSmith **service key** (`lsv2_sk_...`), not a personal access token, for deployment permissions.
 
 ## Switching Models
 
@@ -98,7 +100,7 @@ langsmith-guided-tour/
 ├── utils/
 │   ├── config.py                              (active agent + project name — single source of truth)
 │   ├── models.py                              (model initialization — swap providers here)
-│   ├── search.py                              (resilient Tavily wrapper with canned fallbacks)
+│   ├── search.py                              (Tavily wrapper with retries and offline results)
 │   └── langsmith_rules.py                     (helpers for run rules + annotation queues)
 ├── agents/
 │   ├── client_research_agent.py               (eval-safe agent imported by Modules 02–05 via utils.config)

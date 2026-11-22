@@ -1,7 +1,7 @@
 # Secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.example
 
 # Python
 __pycache__/
@@ -46,3 +46,6 @@ Thumbs.db
 
 # Internal planning docs (not shipped with the tour)
 planning/
+
+# Local planning docs
+/docs/
