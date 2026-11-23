@@ -30,7 +30,7 @@ Beta features (Engine fix validation, Red Teaming, tool policies and others) are
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
 - A LangSmith Cloud account ([sign up](https://smith.langchain.com)) with an agent-based workspace. Project-based and self-hosted workspaces work too: set `LANGSMITH_PROJECT` in `.env` (Module 00 explains).
 - Model access: an LLM Gateway key by default, or a provider key (see *Switching Models*)
-- A Tavily API key for the agent's web search ([get one](https://tavily.com))
+- Optional: a Tavily API key for live web search ([get one](https://tavily.com)). Without it, search uses built-in offline results
 
 ## Setup
 
@@ -54,7 +54,7 @@ Then open `modules/00_setup.ipynb` and run the cells in order.
 |---|---|---|
 | `LANGSMITH_API_KEY` | All modules (tracing, evals, Engine, deploy) | LangSmith **Settings** → **API Keys** (a Personal Access Token) |
 | `LANGSMITH_GATEWAY_API_KEY` | Every model call (default model setup), and Module 06 sections 1–3 | A LangSmith key for a workspace whose LLM Gateway serves the model |
-| `TAVILY_API_KEY` | The agent's web search | <https://tavily.com> |
+| `TAVILY_API_KEY` | Optional: live web search. Without it, search uses built-in offline results | <https://tavily.com> |
 
 `.env.example` lists the optional settings: workspace ID, agent ID and environment, or a project name for project-based workspaces.
 
@@ -97,7 +97,7 @@ langsmith-guided-tour/
 ├── utils/
 │   ├── config.py                     (agent, environments, dataset and queue names: single source of truth)
 │   ├── models.py                     (model setup: switch providers here)
-│   ├── search.py                     (resilient Tavily wrapper with canned fallbacks)
+│   ├── search.py                     (Tavily wrapper; offline results without a key)
 │   ├── traffic.py                    (seed traffic for Modules 02 and 04)
 │   ├── notebook.py                   (links printed by the notebooks)
 │   ├── workspace.py                  (workspace secrets, model configurations, agent tags)
@@ -167,7 +167,7 @@ To contribute a new example back to the samples repo, open a PR against `main`. 
 The judges in Module 04 run on your workspace's own LLM Gateway. Add a provider key as a workspace secret, or Gateway Credits, then rerun the traffic cell.
 
 **Web search returns canned results**
-Your Tavily key is out of searches or unreachable. `utils/search.py` falls back to canned results so the notebooks still run; add a key with searches left for live results.
+Results tagged `[reference results: background, not live news]` mean `TAVILY_API_KEY` is unset: search uses built-in offline results, which is fine for the tour. Results starting `[fallback content` mean your key is set but out of searches or unreachable; fix or remove it.
 
 **`langgraph deploy` fails with 403 / permission denied**
 Your key can't create deployments. Use a Personal Access Token or service key with deployment permissions, not a **Tracing Only** key.

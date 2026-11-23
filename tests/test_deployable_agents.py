@@ -81,7 +81,7 @@ def test_managed_agent_has_no_client_lookup():
     assert sources and not any("get_client_profile" in text for text in sources)
 
 
-def test_managed_search_returns_failures_to_the_model(monkeypatch):
+def _managed_search_module():
     import sys
 
     sys.path.insert(0, str(MANAGED_DIR))
@@ -89,6 +89,11 @@ def test_managed_search_returns_failures_to_the_model(monkeypatch):
         from tools import search
     finally:
         sys.path.remove(str(MANAGED_DIR))
+    return search
+
+
+def test_managed_search_returns_failures_to_the_model(monkeypatch):
+    search = _managed_search_module()
 
     def over_quota(self, *args, **kwargs):
         raise RuntimeError("This request exceeds your plan's set usage limit.")
@@ -99,3 +104,19 @@ def test_managed_search_returns_failures_to_the_model(monkeypatch):
 
     assert result["results"] == []
     assert "usage limit" in result["error"]
+
+
+def test_managed_search_without_key_returns_offline_results(monkeypatch):
+    search = _managed_search_module()
+    monkeypatch.delenv("TAVILY_API_KEY", raising=False)
+
+    def no_client(*args, **kwargs):
+        raise AssertionError("TavilyClient must not be built without a key")
+
+    monkeypatch.setattr(search, "TavilyClient", no_client)
+
+    result = search.web_search.invoke({"query": "What moved Microsoft's stock this week?"})
+
+    assert result["note"] == "[reference results: background, not live news]"
+    assert "Azure" in result["results"][0]["content"]
+    assert search.web_search.invoke({"query": "weather"})["results"][0]["title"].startswith("US markets")
