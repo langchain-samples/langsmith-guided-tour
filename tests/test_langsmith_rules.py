@@ -26,7 +26,7 @@ SCHEMA = {
     "properties": {"correctness": {"type": "number"}},
     "required": ["correctness"],
 }
-MODEL_ID = "openai/gpt-5.6-luna"
+MODEL_ID = "anthropic/claude-sonnet-4-6"
 
 
 class FakeResponse:

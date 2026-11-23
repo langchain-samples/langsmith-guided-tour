@@ -1,0 +1,12 @@
+# Kept out of `langgraph deploy --remote` uploads and Docker build contexts.
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+.worktrees/
+docs/
+planning/
+.venv/
+**/__pycache__/
+**/.ipynb_checkpoints/
