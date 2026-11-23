@@ -1,0 +1,23 @@
+tests/test_engine_reports.py
+  s_5a0b28b8dbf4a0::t_2c5b977743d857 1-43
+modules/01_build_a_deep_agent_optional.ipynb
+  s_5a0b28b8dbf4a0::t_fa5ed1378e67d0 649-654,675-681,683,685-688,1038,1040,1053-1054
+utils/engine_reports.py
+  s_5a0b28b8dbf4a0::t_2c5b977743d857 7-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a63d22fa66011620d18b75d9d9ad7e67fbbb4a3c",
+  "prompts": {},
+  "sessions": {
+    "s_5a0b28b8dbf4a0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "77b27734-3ead-4c95-9a76-152903b1f507",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
