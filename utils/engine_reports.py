@@ -4,9 +4,14 @@ from langsmith import Client
 
 
 def latest_insights_job(client: Client, project_id: str) -> dict | None:
-    """Return the newest Insights report job on a project, or None if there is none."""
-    response = client.request_with_retries("GET", f"/sessions/{project_id}/insights")
-    jobs = response.json()["clustering_jobs"]
+    """Return the newest Insights report job on a project, or None if there is none or it can't be read."""
+    url = f"{client.api_url}/sessions/{project_id}/insights"
+    response = client.session.get(url, headers=client._headers)
+    if not response.ok:
+        # 403: no Insights entitlement or permission; 404: the project has no reports endpoint.
+        print(f"Could not read Insights reports ({response.status_code}): check your plan and permissions.")
+        return None
+    jobs = response.json().get("clustering_jobs", [])
     if not jobs:
         return None
     return max(jobs, key=lambda job: job["created_at"])
