@@ -8,17 +8,20 @@ from langchain.chat_models import init_chat_model
 
 load_dotenv(Path(__file__).resolve().parents[1] / ".env", override=True)
 
-# --- OpenAI gpt-5.6-luna via the LangSmith LLM Gateway (default) ---
+# --- Anthropic claude-sonnet-4-6 via the LangSmith LLM Gateway (default) ---
 MODEL_SPEC = {
-    "model": "openai:gpt-5.6-luna",
-    "base_url": "https://gateway.smith.langchain.com/openai",
-    "use_responses_api": True,
+    "model": "anthropic:claude-sonnet-4-6",
+    "base_url": "https://gateway.smith.langchain.com/anthropic",
 }
 # The gateway key may come from another workspace that has model access.
 API_KEY_ENV = "LANGSMITH_GATEWAY_API_KEY"
 
-# --- Anthropic via the LangSmith LLM Gateway ---
-# MODEL_SPEC = {"model": "anthropic:claude-sonnet-4-6", "base_url": "https://gateway.smith.langchain.com/anthropic"}
+# --- OpenAI gpt-5.6-luna via the LangSmith LLM Gateway ---
+# MODEL_SPEC = {
+#     "model": "openai:gpt-5.6-luna",
+#     "base_url": "https://gateway.smith.langchain.com/openai",
+#     "use_responses_api": True,
+# }
 # API_KEY_ENV = "LANGSMITH_GATEWAY_API_KEY"
 
 # --- Anthropic, direct ---

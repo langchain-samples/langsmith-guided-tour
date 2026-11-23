@@ -67,16 +67,16 @@ Every module and agent builds its model from `utils/models.py`. To switch, uncom
 ```python
 # utils/models.py
 
-# OpenAI gpt-5.6-luna via the LangSmith LLM Gateway (default)
-MODEL_SPEC = {"model": "openai:gpt-5.6-luna", "base_url": "https://gateway.smith.langchain.com/openai", "use_responses_api": True}
+# Anthropic claude-sonnet-4-6 via the LangSmith LLM Gateway (default)
+MODEL_SPEC = {"model": "anthropic:claude-sonnet-4-6", "base_url": "https://gateway.smith.langchain.com/anthropic"}
 API_KEY_ENV = "LANGSMITH_GATEWAY_API_KEY"
 
-# Anthropic, direct
-# MODEL_SPEC = {"model": "anthropic:claude-sonnet-4-6"}
-# API_KEY_ENV = "ANTHROPIC_API_KEY"
+# OpenAI gpt-5.6-luna via the LangSmith LLM Gateway
+# MODEL_SPEC = {"model": "openai:gpt-5.6-luna", "base_url": "https://gateway.smith.langchain.com/openai", "use_responses_api": True}
+# API_KEY_ENV = "LANGSMITH_GATEWAY_API_KEY"
 ```
 
-The file also has Anthropic through the Gateway, OpenAI direct, Azure OpenAI and AWS Bedrock. Set the matching key in `.env`.
+The file also has Anthropic direct, OpenAI direct, Azure OpenAI and AWS Bedrock. Set the matching key in `.env`. Two places don't read `utils/models.py`: Module 04's `JUDGE_MODEL_ID` (a `provider/model` the Gateway serves, e.g. `anthropic/claude-sonnet-4-6`) and the managed agent in `agents/managed/client_research/agent.py`, which builds its own model.
 
 ## Deploy (Module 07)
 
@@ -163,7 +163,7 @@ To contribute a new example back to the samples repo, open a PR against `main`. 
 
 ## Common Issues
 
-**Online judges score nothing, or feedback shows `Required workspace secret "OPENAI_API_KEY" is missing`**
+**Online judges score nothing, or feedback shows `Required workspace secret "OPENAI_API_KEY" (or "ANTHROPIC_API_KEY") is missing`**
 The judges in Module 04 run on your workspace's own LLM Gateway. Add a provider key as a workspace secret, or Gateway Credits, then rerun the traffic cell.
 
 **Web search returns canned results**

@@ -28,8 +28,9 @@ class RuleInfo:
 
 
 def judge_model(model_id: str) -> dict:
-    """Serialized judge model that runs on this workspace's LLM Gateway, e.g. `openai/gpt-5.6-luna`."""
+    """Serialized judge model that runs on this workspace's LLM Gateway, e.g. `anthropic/claude-sonnet-4-6`."""
     # LangSmith swaps this for its own Gateway client at run time, so no workspace provider secret is needed.
+    # Stays ChatOpenAI + Responses API for every provider: that exact shape marks a gateway judge.
     return {
         "lc": 1,
         "type": "constructor",
