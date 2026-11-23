@@ -1,0 +1,39 @@
+tests/test_search.py
+  s_5a0b28b8dbf4a0::t_3aebdd3b1b029d 82-85
+  s_5a0b28b8dbf4a0::t_b6c20bface8999 1-81,86-107
+utils/search.py
+  s_5a0b28b8dbf4a0::t_d9c43dc638915e 195-244
+  s_5a0b28b8dbf4a0::t_b6c20bface8999 1,3,8-9,11,17-19,21-194,245-321,399,401-413,418,423-429,431-441,443-447,466-467,481-489,508
+modules/00_setup.ipynb
+  s_5a0b28b8dbf4a0::t_458dab7b1eb8b3 233-234
+  s_5a0b28b8dbf4a0::t_5ba70832f391ab 79,87,106,110,205,220,235,248
+.env.example
+  s_5a0b28b8dbf4a0::t_b44e8f9cb99cee 22-24
+modules/01_build_a_deep_agent_optional.ipynb
+  s_5a0b28b8dbf4a0::t_8cfe3c0c548533 212
+README.md
+  s_5a0b28b8dbf4a0::t_b44e8f9cb99cee 33,57,170
+  s_5a0b28b8dbf4a0::t_cf21528799a6de 100
+modules/07_deploy_optional.ipynb
+  s_5a0b28b8dbf4a0::t_8cfe3c0c548533 144,381
+agents/managed/client_research/tools/search.py
+  s_5a0b28b8dbf4a0::t_4df6d2f2f694a5 1-3,8-47,56-59
+tests/test_deployable_agents.py
+  s_5a0b28b8dbf4a0::t_078e01025a6675 84,92-96,107-122
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70f3a144ee16489f06eef7f854eebf6f72047be6",
+  "prompts": {},
+  "sessions": {
+    "s_5a0b28b8dbf4a0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "77b27734-3ead-4c95-9a76-152903b1f507",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Avi Kumar <avirath.kmr@gmail.com>"
+    }
+  }
+}
