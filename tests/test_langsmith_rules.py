@@ -89,13 +89,26 @@ def test_upsert_judge_posts_filtered_run_rule():
     assert "group_by" not in body
     structured = body["evaluators"][0]["structured"]
     assert structured["prompt"][0] == ["system", "Score it."]
-    assert structured["schema"] == SCHEMA
+    assert structured["schema"] == {**SCHEMA, "additionalProperties": False}
     assert structured["variable_mapping"] == {"input": "input", "output": "output"}
     assert structured["model"] == judge_model(MODEL_ID)
     assert rule == RuleInfo(
         id="rule-new", name="correctness",
         url="https://smith.langchain.com/o/t-1/projects/p/p-1?tab=evaluators",
     )
+
+
+def test_judge_schema_is_strict_for_anthropic():
+    client = FakeClient()
+    bounded = {**SCHEMA, "properties": {"correctness": {"type": "number", "minimum": 0, "maximum": 1, "description": "0 to 1"}}}
+    upsert_judge(
+        client, PROJECT, name="correctness", prompt="p", schema=bounded,
+        filter="eq(is_root, true)", model_id=MODEL_ID,
+    )
+    sent = posted_body(client)["evaluators"][0]["structured"]["schema"]
+    assert sent["additionalProperties"] is False
+    assert sent["properties"]["correctness"] == {"type": "number", "description": "0 to 1"}
+    assert bounded["properties"]["correctness"]["minimum"] == 0  # caller's schema untouched
 
 
 def test_upsert_replaces_rule_with_same_name_only():
