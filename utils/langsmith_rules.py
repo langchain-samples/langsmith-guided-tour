@@ -72,11 +72,21 @@ def _replace_rule(client, project: TracingDestination, body: dict) -> dict:
     return response.json()
 
 
+def _gateway_schema(schema: dict) -> dict:
+    """Judge schema in the strict form Anthropic's structured output accepts through the Gateway."""
+    # Strict mode rejects objects without additionalProperties=false and numbers with minimum/maximum.
+    properties = {
+        key: {k: v for k, v in prop.items() if k not in ("minimum", "maximum")}
+        for key, prop in schema.get("properties", {}).items()
+    }
+    return {**schema, "properties": properties, "additionalProperties": False}
+
+
 def _llm_evaluator(prompt_messages: list[list[str]], schema: dict, variable_mapping: dict, model_id: str) -> dict:
     return {
         "structured": {
             "prompt": prompt_messages,
-            "schema": schema,
+            "schema": _gateway_schema(schema),
             "variable_mapping": variable_mapping,
             "model": judge_model(model_id),
         }
